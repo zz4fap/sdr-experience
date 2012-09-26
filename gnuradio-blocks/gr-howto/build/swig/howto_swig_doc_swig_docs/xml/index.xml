@@ -1,0 +1,331 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygenindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="index.xsd" version="1.7.6.1">
+  <compound refid="classstd_1_1allocator" kind="class"><name>std::allocator</name>
+    <member refid="classstd_1_1allocator_1a55f88dab1194d6b8a34e46017c4dfd79" kind="variable"><name>elements</name></member>
+  </compound>
+  <compound refid="classstd_1_1auto__ptr" kind="class"><name>std::auto_ptr</name>
+    <member refid="classstd_1_1auto__ptr_1a076c936287003dc557981f9ccec1d841" kind="variable"><name>ptr</name></member>
+    <member refid="classstd_1_1auto__ptr_1aa16b96ffd607af4bb6ba4738d77124f8" kind="function"><name>operator-&gt;</name></member>
+  </compound>
+  <compound refid="classstd_1_1bad__alloc" kind="class"><name>std::bad_alloc</name>
+  </compound>
+  <compound refid="classstd_1_1bad__cast" kind="class"><name>std::bad_cast</name>
+  </compound>
+  <compound refid="classstd_1_1bad__exception" kind="class"><name>std::bad_exception</name>
+  </compound>
+  <compound refid="classstd_1_1bad__typeid" kind="class"><name>std::bad_typeid</name>
+  </compound>
+  <compound refid="classstd_1_1basic__fstream" kind="class"><name>std::basic_fstream</name>
+  </compound>
+  <compound refid="classstd_1_1basic__ifstream" kind="class"><name>std::basic_ifstream</name>
+  </compound>
+  <compound refid="classstd_1_1basic__ios" kind="class"><name>std::basic_ios</name>
+  </compound>
+  <compound refid="classstd_1_1basic__iostream" kind="class"><name>std::basic_iostream</name>
+  </compound>
+  <compound refid="classstd_1_1basic__istream" kind="class"><name>std::basic_istream</name>
+  </compound>
+  <compound refid="classstd_1_1basic__istringstream" kind="class"><name>std::basic_istringstream</name>
+  </compound>
+  <compound refid="classstd_1_1basic__ofstream" kind="class"><name>std::basic_ofstream</name>
+  </compound>
+  <compound refid="classstd_1_1basic__ostream" kind="class"><name>std::basic_ostream</name>
+  </compound>
+  <compound refid="classstd_1_1basic__ostringstream" kind="class"><name>std::basic_ostringstream</name>
+  </compound>
+  <compound refid="classstd_1_1basic__string" kind="class"><name>std::basic_string</name>
+  </compound>
+  <compound refid="classstd_1_1basic__stringstream" kind="class"><name>std::basic_stringstream</name>
+  </compound>
+  <compound refid="classstd_1_1bitset" kind="class"><name>std::bitset</name>
+  </compound>
+  <compound refid="classstd_1_1complex" kind="class"><name>std::complex</name>
+  </compound>
+  <compound refid="classstd_1_1map_1_1const__iterator" kind="class"><name>std::map::const_iterator</name>
+  </compound>
+  <compound refid="classstd_1_1multimap_1_1const__iterator" kind="class"><name>std::multimap::const_iterator</name>
+  </compound>
+  <compound refid="classstd_1_1basic__string_1_1const__iterator" kind="class"><name>std::basic_string::const_iterator</name>
+  </compound>
+  <compound refid="classstd_1_1set_1_1const__iterator" kind="class"><name>std::set::const_iterator</name>
+  </compound>
+  <compound refid="classstd_1_1multiset_1_1const__iterator" kind="class"><name>std::multiset::const_iterator</name>
+  </compound>
+  <compound refid="classstd_1_1string_1_1const__iterator" kind="class"><name>std::string::const_iterator</name>
+  </compound>
+  <compound refid="classstd_1_1vector_1_1const__iterator" kind="class"><name>std::vector::const_iterator</name>
+  </compound>
+  <compound refid="classstd_1_1wstring_1_1const__iterator" kind="class"><name>std::wstring::const_iterator</name>
+  </compound>
+  <compound refid="classstd_1_1deque_1_1const__iterator" kind="class"><name>std::deque::const_iterator</name>
+  </compound>
+  <compound refid="classstd_1_1list_1_1const__iterator" kind="class"><name>std::list::const_iterator</name>
+  </compound>
+  <compound refid="classstd_1_1map_1_1const__reverse__iterator" kind="class"><name>std::map::const_reverse_iterator</name>
+  </compound>
+  <compound refid="classstd_1_1multimap_1_1const__reverse__iterator" kind="class"><name>std::multimap::const_reverse_iterator</name>
+  </compound>
+  <compound refid="classstd_1_1deque_1_1const__reverse__iterator" kind="class"><name>std::deque::const_reverse_iterator</name>
+  </compound>
+  <compound refid="classstd_1_1set_1_1const__reverse__iterator" kind="class"><name>std::set::const_reverse_iterator</name>
+  </compound>
+  <compound refid="classstd_1_1basic__string_1_1const__reverse__iterator" kind="class"><name>std::basic_string::const_reverse_iterator</name>
+  </compound>
+  <compound refid="classstd_1_1multiset_1_1const__reverse__iterator" kind="class"><name>std::multiset::const_reverse_iterator</name>
+  </compound>
+  <compound refid="classstd_1_1vector_1_1const__reverse__iterator" kind="class"><name>std::vector::const_reverse_iterator</name>
+  </compound>
+  <compound refid="classstd_1_1string_1_1const__reverse__iterator" kind="class"><name>std::string::const_reverse_iterator</name>
+  </compound>
+  <compound refid="classstd_1_1wstring_1_1const__reverse__iterator" kind="class"><name>std::wstring::const_reverse_iterator</name>
+  </compound>
+  <compound refid="classstd_1_1list_1_1const__reverse__iterator" kind="class"><name>std::list::const_reverse_iterator</name>
+  </compound>
+  <compound refid="classstd_1_1deque" kind="class"><name>std::deque</name>
+    <member refid="classstd_1_1deque_1a090b92581de438d2e14bedc190f0b0f9" kind="variable"><name>elements</name></member>
+  </compound>
+  <compound refid="classstd_1_1domain__error" kind="class"><name>std::domain_error</name>
+  </compound>
+  <compound refid="classstd_1_1exception" kind="class"><name>std::exception</name>
+  </compound>
+  <compound refid="classstd_1_1ios__base_1_1failure" kind="class"><name>std::ios_base::failure</name>
+  </compound>
+  <compound refid="classstd_1_1fstream" kind="class"><name>std::fstream</name>
+  </compound>
+  <compound refid="classhowto__peak__location__cf" kind="class"><name>howto_peak_location_cf</name>
+    <member refid="classhowto__peak__location__cf_1a43ea2f27c9e7045adf164e41353d46ad" kind="variable"><name>d_sample_rate</name></member>
+    <member refid="classhowto__peak__location__cf_1a8e8957af6d98dcdedc33526b75ab73b6" kind="variable"><name>d_ninput_samples</name></member>
+    <member refid="classhowto__peak__location__cf_1a0570b089aa004c7230a07cfb388e16bd" kind="friend"><name>howto_make_peak_location_cf</name></member>
+    <member refid="classhowto__peak__location__cf_1aabed391a9a0ed706b85ba34b4be0f1ac" kind="function"><name>howto_peak_location_cf</name></member>
+    <member refid="classhowto__peak__location__cf_1abe8415243c02d1bef96cc0674ccda968" kind="function"><name>~howto_peak_location_cf</name></member>
+    <member refid="classhowto__peak__location__cf_1a95f05f095ba57c36c98c5e4bd46cfc63" kind="function"><name>ninput_samples</name></member>
+    <member refid="classhowto__peak__location__cf_1a5d660ece0bf061174582360c1206d4e0" kind="function"><name>set_ninput_samples</name></member>
+    <member refid="classhowto__peak__location__cf_1a324a1a78b73805a0e50c804521d2a7ff" kind="function"><name>sample_rate</name></member>
+    <member refid="classhowto__peak__location__cf_1a07794cf66c1487f120839daa4693e27a" kind="function"><name>set_sample_rate</name></member>
+    <member refid="classhowto__peak__location__cf_1a6f255ace5eef7bdcab75952a2bcdfef4" kind="function"><name>work</name></member>
+  </compound>
+  <compound refid="classhowto__spectrum__sensing__cf" kind="class"><name>howto_spectrum_sensing_cf</name>
+    <member refid="classhowto__spectrum__sensing__cf_1a799359ee0fbf8a22469987a8ae2d8293" kind="variable"><name>d_sample_rate</name></member>
+    <member refid="classhowto__spectrum__sensing__cf_1aa01cb5471a070bca17e9273800cffc52" kind="variable"><name>d_pfd</name></member>
+    <member refid="classhowto__spectrum__sensing__cf_1ab4c74eb559f4b5625ec6c4175dc6e428" kind="variable"><name>d_pfa</name></member>
+    <member refid="classhowto__spectrum__sensing__cf_1a3b63ec0d0340d49859b21fc1d76ee903" kind="variable"><name>d_tcme</name></member>
+    <member refid="classhowto__spectrum__sensing__cf_1aff43ccb8f781bd816836d37b20cdbbfa" kind="variable"><name>d_false_alarm_rate</name></member>
+    <member refid="classhowto__spectrum__sensing__cf_1aa77f5bfa4a3afa5c27c65865ef6a9006" kind="variable"><name>d_correct_rejection_rate</name></member>
+    <member refid="classhowto__spectrum__sensing__cf_1a56e2a69d310b11f99d1c38327d3a86c6" kind="variable"><name>segment</name></member>
+    <member refid="classhowto__spectrum__sensing__cf_1a4e173271309beaead1346b1de899dbe5" kind="variable"><name>sorted_segment</name></member>
+    <member refid="classhowto__spectrum__sensing__cf_1a50d0170fc66d09d48dd48f5aa88c8d89" kind="variable"><name>d_ninput_samples</name></member>
+    <member refid="classhowto__spectrum__sensing__cf_1af430c0654cd31f55c8731e82e18a9c6e" kind="variable"><name>d_nsub_bands</name></member>
+    <member refid="classhowto__spectrum__sensing__cf_1a81c453aa70361d0190ec1ac5f69fd0f1" kind="variable"><name>d_false_alarm_counter</name></member>
+    <member refid="classhowto__spectrum__sensing__cf_1ac1327978bf8befa55cbbae3f90b2a0f4" kind="variable"><name>d_correct_rejection_counter</name></member>
+    <member refid="classhowto__spectrum__sensing__cf_1a6e8f731c096633e119a17c197e15af79" kind="variable"><name>d_trials_counter</name></member>
+    <member refid="classhowto__spectrum__sensing__cf_1aefa58f9aeda431080d854d6f1f88ea9b" kind="variable"><name>d_debug_far</name></member>
+    <member refid="classhowto__spectrum__sensing__cf_1ac7ea6aabf7366554d6d05f87d1df5e28" kind="variable"><name>d_debug_stats</name></member>
+    <member refid="classhowto__spectrum__sensing__cf_1a3930683395f0beb2f61d7bbca042c441" kind="friend"><name>howto_make_spectrum_sensing_cf</name></member>
+    <member refid="classhowto__spectrum__sensing__cf_1afbc2121f62bb5256cf60b28b129bdcfb" kind="function"><name>howto_spectrum_sensing_cf</name></member>
+    <member refid="classhowto__spectrum__sensing__cf_1aec3d531230b359f3259882b6e32848c7" kind="function"><name>segment_spectrum</name></member>
+    <member refid="classhowto__spectrum__sensing__cf_1aba963efffce496db6f79dbe04795f8af" kind="function"><name>sort_energy</name></member>
+    <member refid="classhowto__spectrum__sensing__cf_1a29727843560f7ff4a2715badb4be1981" kind="function"><name>calculate_noise_reference</name></member>
+    <member refid="classhowto__spectrum__sensing__cf_1a1a3c8efe4c473e6696f994ef2abd1210" kind="function"><name>calculate_scale_factor</name></member>
+    <member refid="classhowto__spectrum__sensing__cf_1a038d5f5ac045dece95718e3fd765e3d9" kind="function"><name>calculate_statistics</name></member>
+    <member refid="classhowto__spectrum__sensing__cf_1aeb627e6050f89bac2147d30e421ac8c8" kind="function"><name>~howto_spectrum_sensing_cf</name></member>
+    <member refid="classhowto__spectrum__sensing__cf_1ac1962478c1c3e610f19dde8477f87a5b" kind="function"><name>ninput_samples</name></member>
+    <member refid="classhowto__spectrum__sensing__cf_1a1c572b05c1f5907e74dac62cc2cf7bf2" kind="function"><name>set_ninput_samples</name></member>
+    <member refid="classhowto__spectrum__sensing__cf_1a3419633d9c907c170deccc7c21dd70f0" kind="function"><name>sample_rate</name></member>
+    <member refid="classhowto__spectrum__sensing__cf_1acb2cd215f9a4979279160725234c8322" kind="function"><name>set_sample_rate</name></member>
+    <member refid="classhowto__spectrum__sensing__cf_1a42c5d5bcff8293f7547fec96a99b206e" kind="function"><name>nsub_bands</name></member>
+    <member refid="classhowto__spectrum__sensing__cf_1a7d0a0710290756c02383d47e1248107d" kind="function"><name>set_nsub_bands</name></member>
+    <member refid="classhowto__spectrum__sensing__cf_1aa84f094ec15e02842ada20895a884153" kind="function"><name>pfd</name></member>
+    <member refid="classhowto__spectrum__sensing__cf_1a37753fb4170fa9ea3be94c291737bfed" kind="function"><name>set_pfd</name></member>
+    <member refid="classhowto__spectrum__sensing__cf_1a5db14e520f46a4f8f0082fc022171e4b" kind="function"><name>pfa</name></member>
+    <member refid="classhowto__spectrum__sensing__cf_1a66e0415e9032a6f665eff8e94378e009" kind="function"><name>set_pfa</name></member>
+    <member refid="classhowto__spectrum__sensing__cf_1ab0eadd53bd54b3580306e290cebf6a44" kind="function"><name>tcme</name></member>
+    <member refid="classhowto__spectrum__sensing__cf_1a333b51e388f27f2a486de7f9fce21224" kind="function"><name>set_tcme</name></member>
+    <member refid="classhowto__spectrum__sensing__cf_1a366a97c9c9317be05c5a384018db29b9" kind="function"><name>false_alarm_rate</name></member>
+    <member refid="classhowto__spectrum__sensing__cf_1a9196579fe5dbbd416ff4da2803305ac0" kind="function"><name>correct_rejection</name></member>
+    <member refid="classhowto__spectrum__sensing__cf_1abed42521db1511734fc13b33396ce30b" kind="function"><name>work</name></member>
+  </compound>
+  <compound refid="classhowto__square2__ff" kind="class"><name>howto_square2_ff</name>
+    <member refid="classhowto__square2__ff_1a416c317eec9d35ca8a188f4f3e9e91c3" kind="friend"><name>howto_make_square2_ff</name></member>
+    <member refid="classhowto__square2__ff_1a6e92c82417fa37ab91f75257efc405cd" kind="function"><name>howto_square2_ff</name></member>
+    <member refid="classhowto__square2__ff_1adc73eeb47d46022cd7b91f081c12c0aa" kind="function"><name>~howto_square2_ff</name></member>
+    <member refid="classhowto__square2__ff_1a29e6a178f3b2bc4221db3efcae959e20" kind="function"><name>work</name></member>
+  </compound>
+  <compound refid="classhowto__square__ff" kind="class"><name>howto_square_ff</name>
+    <member refid="classhowto__square__ff_1abd1f4314ce7d526af858b0fc6f670fdb" kind="friend"><name>howto_make_square_ff</name></member>
+    <member refid="classhowto__square__ff_1ae3a0f7c4bb423b035696f3c6893cb529" kind="function"><name>howto_square_ff</name></member>
+    <member refid="classhowto__square__ff_1ac66feabc886a9463f843ee85b6cf1e33" kind="function"><name>~howto_square_ff</name></member>
+    <member refid="classhowto__square__ff_1ac6bd32f6c5d7ced0825a1ccd61ad04e9" kind="function"><name>general_work</name></member>
+  </compound>
+  <compound refid="classhowto__stream__to__vector" kind="class"><name>howto_stream_to_vector</name>
+    <member refid="classhowto__stream__to__vector_1a1986cdcccfd8bad6bea5d24100ea7c53" kind="friend"><name>howto_make_stream_to_vector</name></member>
+    <member refid="classhowto__stream__to__vector_1afe3693739a835d5b2743702b62e68f6a" kind="function"><name>howto_stream_to_vector</name></member>
+    <member refid="classhowto__stream__to__vector_1a9960a6d3ba5f1ebf34514cee74bde6b2" kind="function"><name>work</name></member>
+  </compound>
+  <compound refid="classstd_1_1ifstream" kind="class"><name>std::ifstream</name>
+  </compound>
+  <compound refid="classstd_1_1invalid__argument" kind="class"><name>std::invalid_argument</name>
+  </compound>
+  <compound refid="classstd_1_1ios" kind="class"><name>std::ios</name>
+  </compound>
+  <compound refid="classstd_1_1ios__base" kind="class"><name>std::ios_base</name>
+  </compound>
+  <compound refid="classstd_1_1istream" kind="class"><name>std::istream</name>
+  </compound>
+  <compound refid="classstd_1_1istringstream" kind="class"><name>std::istringstream</name>
+  </compound>
+  <compound refid="classstd_1_1deque_1_1iterator" kind="class"><name>std::deque::iterator</name>
+  </compound>
+  <compound refid="classstd_1_1multimap_1_1iterator" kind="class"><name>std::multimap::iterator</name>
+  </compound>
+  <compound refid="classstd_1_1set_1_1iterator" kind="class"><name>std::set::iterator</name>
+  </compound>
+  <compound refid="classstd_1_1basic__string_1_1iterator" kind="class"><name>std::basic_string::iterator</name>
+  </compound>
+  <compound refid="classstd_1_1multiset_1_1iterator" kind="class"><name>std::multiset::iterator</name>
+  </compound>
+  <compound refid="classstd_1_1vector_1_1iterator" kind="class"><name>std::vector::iterator</name>
+  </compound>
+  <compound refid="classstd_1_1string_1_1iterator" kind="class"><name>std::string::iterator</name>
+  </compound>
+  <compound refid="classstd_1_1wstring_1_1iterator" kind="class"><name>std::wstring::iterator</name>
+  </compound>
+  <compound refid="classstd_1_1list_1_1iterator" kind="class"><name>std::list::iterator</name>
+  </compound>
+  <compound refid="classstd_1_1map_1_1iterator" kind="class"><name>std::map::iterator</name>
+  </compound>
+  <compound refid="classstd_1_1length__error" kind="class"><name>std::length_error</name>
+  </compound>
+  <compound refid="classstd_1_1list" kind="class"><name>std::list</name>
+    <member refid="classstd_1_1list_1a682e5c7c91eb377d0cb4f019b2b81a5d" kind="variable"><name>elements</name></member>
+  </compound>
+  <compound refid="classstd_1_1logic__error" kind="class"><name>std::logic_error</name>
+  </compound>
+  <compound refid="classstd_1_1map" kind="class"><name>std::map</name>
+    <member refid="classstd_1_1map_1a8dc2b3ed44acf51fb2bd3eb30b237269" kind="variable"><name>keys</name></member>
+    <member refid="classstd_1_1map_1ac69fe575e214b796b8d9457b0c22469a" kind="variable"><name>elements</name></member>
+  </compound>
+  <compound refid="classstd_1_1multimap" kind="class"><name>std::multimap</name>
+    <member refid="classstd_1_1multimap_1a4e7d19eda5925ebfcf1e3dcba085cce5" kind="variable"><name>keys</name></member>
+    <member refid="classstd_1_1multimap_1abb7a4781b562bae0a54baeb5726ac28d" kind="variable"><name>elements</name></member>
+  </compound>
+  <compound refid="classstd_1_1multiset" kind="class"><name>std::multiset</name>
+    <member refid="classstd_1_1multiset_1a93eb79091066c87f6dfb9d07c6c7cbcd" kind="variable"><name>keys</name></member>
+  </compound>
+  <compound refid="classstd_1_1ofstream" kind="class"><name>std::ofstream</name>
+  </compound>
+  <compound refid="classstd_1_1ostream" kind="class"><name>std::ostream</name>
+  </compound>
+  <compound refid="classstd_1_1ostringstream" kind="class"><name>std::ostringstream</name>
+  </compound>
+  <compound refid="classstd_1_1out__of__range" kind="class"><name>std::out_of_range</name>
+  </compound>
+  <compound refid="classstd_1_1overflow__error" kind="class"><name>std::overflow_error</name>
+  </compound>
+  <compound refid="classstd_1_1priority__queue" kind="class"><name>std::priority_queue</name>
+    <member refid="classstd_1_1priority__queue_1a4df2ae826d2b2caf4a6755adbd34a836" kind="variable"><name>elements</name></member>
+  </compound>
+  <compound refid="classstd_1_1queue" kind="class"><name>std::queue</name>
+    <member refid="classstd_1_1queue_1aebacc4dcb935c5e54144e881eb41e356" kind="variable"><name>elements</name></member>
+  </compound>
+  <compound refid="classstd_1_1range__error" kind="class"><name>std::range_error</name>
+  </compound>
+  <compound refid="classstd_1_1multimap_1_1reverse__iterator" kind="class"><name>std::multimap::reverse_iterator</name>
+  </compound>
+  <compound refid="classstd_1_1multiset_1_1reverse__iterator" kind="class"><name>std::multiset::reverse_iterator</name>
+  </compound>
+  <compound refid="classstd_1_1string_1_1reverse__iterator" kind="class"><name>std::string::reverse_iterator</name>
+  </compound>
+  <compound refid="classstd_1_1basic__string_1_1reverse__iterator" kind="class"><name>std::basic_string::reverse_iterator</name>
+  </compound>
+  <compound refid="classstd_1_1wstring_1_1reverse__iterator" kind="class"><name>std::wstring::reverse_iterator</name>
+  </compound>
+  <compound refid="classstd_1_1map_1_1reverse__iterator" kind="class"><name>std::map::reverse_iterator</name>
+  </compound>
+  <compound refid="classstd_1_1vector_1_1reverse__iterator" kind="class"><name>std::vector::reverse_iterator</name>
+  </compound>
+  <compound refid="classstd_1_1set_1_1reverse__iterator" kind="class"><name>std::set::reverse_iterator</name>
+  </compound>
+  <compound refid="classstd_1_1deque_1_1reverse__iterator" kind="class"><name>std::deque::reverse_iterator</name>
+  </compound>
+  <compound refid="classstd_1_1list_1_1reverse__iterator" kind="class"><name>std::list::reverse_iterator</name>
+  </compound>
+  <compound refid="classstd_1_1runtime__error" kind="class"><name>std::runtime_error</name>
+  </compound>
+  <compound refid="classstd_1_1set" kind="class"><name>std::set</name>
+    <member refid="classstd_1_1set_1a7f92ca6d6e5216b9c4be631bd87f1df4" kind="variable"><name>keys</name></member>
+  </compound>
+  <compound refid="classstd_1_1smart__ptr" kind="class"><name>std::smart_ptr</name>
+    <member refid="classstd_1_1smart__ptr_1a28b08019309e26ad374ef88cd2641ea3" kind="variable"><name>ptr</name></member>
+    <member refid="classstd_1_1smart__ptr_1a34adc9f82172f037139e4b916c275e90" kind="function"><name>operator-&gt;</name></member>
+  </compound>
+  <compound refid="classstd_1_1stack" kind="class"><name>std::stack</name>
+    <member refid="classstd_1_1stack_1a020dde37186e898d2aacda2c136aef0f" kind="variable"><name>elements</name></member>
+  </compound>
+  <compound refid="classstd_1_1string" kind="class"><name>std::string</name>
+  </compound>
+  <compound refid="classstd_1_1stringstream" kind="class"><name>std::stringstream</name>
+  </compound>
+  <compound refid="classstd_1_1underflow__error" kind="class"><name>std::underflow_error</name>
+  </compound>
+  <compound refid="classstd_1_1unique__ptr" kind="class"><name>std::unique_ptr</name>
+    <member refid="classstd_1_1unique__ptr_1adae741234450c126c1260d389e1720b9" kind="variable"><name>ptr</name></member>
+    <member refid="classstd_1_1unique__ptr_1a94e5fed358ff2ef440499ac836dd68f2" kind="function"><name>operator-&gt;</name></member>
+  </compound>
+  <compound refid="classstd_1_1valarray" kind="class"><name>std::valarray</name>
+    <member refid="classstd_1_1valarray_1adce3a23af4e9d36342f49f58300d8568" kind="variable"><name>elements</name></member>
+  </compound>
+  <compound refid="classstd_1_1vector" kind="class"><name>std::vector</name>
+    <member refid="classstd_1_1vector_1a2396209900e8f592db1f0b2467f7d899" kind="variable"><name>elements</name></member>
+  </compound>
+  <compound refid="classstd_1_1weak__ptr" kind="class"><name>std::weak_ptr</name>
+    <member refid="classstd_1_1weak__ptr_1a2346c22e2352ad88a4973f2c8aab91a5" kind="variable"><name>ptr</name></member>
+    <member refid="classstd_1_1weak__ptr_1a3385d327d4804d675b2a052265651a7b" kind="function"><name>operator-&gt;</name></member>
+  </compound>
+  <compound refid="classstd_1_1wfstream" kind="class"><name>std::wfstream</name>
+  </compound>
+  <compound refid="classstd_1_1wifstream" kind="class"><name>std::wifstream</name>
+  </compound>
+  <compound refid="classstd_1_1wios" kind="class"><name>std::wios</name>
+  </compound>
+  <compound refid="classstd_1_1wistream" kind="class"><name>std::wistream</name>
+  </compound>
+  <compound refid="classstd_1_1wistringstream" kind="class"><name>std::wistringstream</name>
+  </compound>
+  <compound refid="classstd_1_1wofstream" kind="class"><name>std::wofstream</name>
+  </compound>
+  <compound refid="classstd_1_1wostream" kind="class"><name>std::wostream</name>
+  </compound>
+  <compound refid="classstd_1_1wostringstream" kind="class"><name>std::wostringstream</name>
+  </compound>
+  <compound refid="classstd_1_1wstring" kind="class"><name>std::wstring</name>
+  </compound>
+  <compound refid="classstd_1_1wstringstream" kind="class"><name>std::wstringstream</name>
+  </compound>
+  <compound refid="namespacestd" kind="namespace"><name>std</name>
+  </compound>
+  <compound refid="howto__api_8h" kind="file"><name>howto_api.h</name>
+    <member refid="howto__api_8h_1a7a9fda890b8e28fac667cbd66796f13b" kind="define"><name>HOWTO_API</name></member>
+  </compound>
+  <compound refid="howto__peak__location__cf_8h" kind="file"><name>howto_peak_location_cf.h</name>
+    <member refid="howto__peak__location__cf_8h_1a06993d269a43c721b8cbf99dfa4cd8e3" kind="typedef"><name>howto_peak_location_cf_sptr</name></member>
+    <member refid="howto__peak__location__cf_8h_1a0570b089aa004c7230a07cfb388e16bd" kind="function"><name>howto_make_peak_location_cf</name></member>
+  </compound>
+  <compound refid="howto__spectrum__sensing__cf_8h" kind="file"><name>howto_spectrum_sensing_cf.h</name>
+    <member refid="howto__spectrum__sensing__cf_8h_1a58f4f29e68d41d73eac39e37922934bd" kind="typedef"><name>howto_spectrum_sensing_cf_sptr</name></member>
+    <member refid="howto__spectrum__sensing__cf_8h_1a3930683395f0beb2f61d7bbca042c441" kind="function"><name>howto_make_spectrum_sensing_cf</name></member>
+  </compound>
+  <compound refid="howto__square2__ff_8h" kind="file"><name>howto_square2_ff.h</name>
+    <member refid="howto__square2__ff_8h_1a950d80b5e8cf51085a2edc16295da5fd" kind="typedef"><name>howto_square2_ff_sptr</name></member>
+    <member refid="howto__square2__ff_8h_1a416c317eec9d35ca8a188f4f3e9e91c3" kind="function"><name>howto_make_square2_ff</name></member>
+  </compound>
+  <compound refid="howto__square__ff_8h" kind="file"><name>howto_square_ff.h</name>
+    <member refid="howto__square__ff_8h_1a726bb18998a5823fae0d292b5493a29a" kind="typedef"><name>howto_square_ff_sptr</name></member>
+    <member refid="howto__square__ff_8h_1abd1f4314ce7d526af858b0fc6f670fdb" kind="function"><name>howto_make_square_ff</name></member>
+  </compound>
+  <compound refid="howto__stream__to__vector_8h" kind="file"><name>howto_stream_to_vector.h</name>
+    <member refid="howto__stream__to__vector_8h_1aae257fe81cbc74909e502bfe618c2756" kind="typedef"><name>howto_stream_to_vector_sptr</name></member>
+    <member refid="howto__stream__to__vector_8h_1a1986cdcccfd8bad6bea5d24100ea7c53" kind="function"><name>howto_make_stream_to_vector</name></member>
+  </compound>
+  <compound refid="dir_37796ba66b4ce7840819a77c371dddfb" kind="dir"><name>/home/zz4fap/Dropbox/gnuradio/gr-howto/include/</name>
+  </compound>
+</doxygenindex>

@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<block>
+  <name>PEAK LOCATION</name>
+  <key>howto_peak_location_cf</key>
+  <category>HOWTO</category>
+  <import>import howto</import>
+  <make>howto.peak_location_cf($sample_rate,$ninput_samples)</make>
+  <callback>set_sample_rate($sample_rate)</callback>
+  <callback>set_ninput_samples($ninput_samples)</callback>
+  <param>
+    <name>Sample Rate</name>
+    <key>sample_rate</key>
+    <type>int</type>
+  </param>
+  <param>
+    <name>Decimation</name>
+    <key>ninput_samples</key>
+    <type>int</type>
+  </param>
+  <sink>
+    <name>in</name>
+    <type>complex</type>
+  </sink>
+  <source>
+    <name>out</name>
+    <type>float</type>
+  </source>
+</block>

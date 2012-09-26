@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+  <compounddef id="dir_37796ba66b4ce7840819a77c371dddfb" kind="dir">
+    <compoundname>/home/zz4fap/Dropbox/gnuradio/gr-howto/include/</compoundname>
+    <innerfile refid="howto__api_8h">howto_api.h</innerfile>
+    <innerfile refid="howto__peak__location__cf_8h">howto_peak_location_cf.h</innerfile>
+    <innerfile refid="howto__spectrum__sensing__cf_8h">howto_spectrum_sensing_cf.h</innerfile>
+    <innerfile refid="howto__square2__ff_8h">howto_square2_ff.h</innerfile>
+    <innerfile refid="howto__square__ff_8h">howto_square_ff.h</innerfile>
+    <innerfile refid="howto__stream__to__vector_8h">howto_stream_to_vector.h</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/zz4fap/Dropbox/gnuradio/gr-howto/include/"/>
+  </compounddef>
+</doxygen>

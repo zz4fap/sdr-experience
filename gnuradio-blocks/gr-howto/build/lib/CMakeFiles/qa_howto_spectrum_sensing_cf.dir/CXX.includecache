@@ -1,0 +1,12 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/zz4fap/Dropbox/gnuradio/gr-howto/lib/qa_howto_spectrum_sensing_cf.cc
+boost/test/unit_test.hpp
+-
+

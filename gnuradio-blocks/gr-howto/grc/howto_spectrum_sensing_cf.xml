@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<block>
+  <name>SPECTRUM SENSING4</name>
+  <key>howto_spectrum_sensing_cf</key>
+  <category>HOWTO</category>
+  <import>import howto</import>
+  <make>howto.spectrum_sensing_cf($sample_rate,$ninput_samples,$nsub_bands,$pfd,$pfa,$tcme,$debug_far,$debug_stats)</make>
+  <callback>set_sample_rate($sample_rate)</callback>
+  <callback>set_ninput_samples($ninput_samples)</callback>
+  <callback>set_nsub_bands($nsub_bands)</callback>
+  <callback>set_pfd($pfd)</callback>
+  <callback>set_pfa($pfa)</callback>
+  <callback>set_tcme($tcme)</callback>
+  <param>
+    <name>Sample Rate</name>
+    <key>sample_rate</key>
+    <type>real</type>
+  </param>
+  <param>
+    <name>FFT Size</name>
+    <key>ninput_samples</key>
+    <value>2048</value>
+    <type>int</type>
+  </param>
+  <param>
+    <name>Number of subbands</name>
+    <key>nsub_bands</key>
+    <value>128</value>
+    <type>int</type>
+  </param>
+  <param>
+    <name>False Discard Probability</name>
+    <key>pfd</key>
+    <value>0.001</value>
+    <type>real</type>
+  </param>
+  <param>
+    <name>False Alarm Probability</name>
+    <key>pfa</key>
+    <value>0.0001</value>
+    <type>real</type>
+  </param>
+  <param>
+    <name>Tcme</name>
+    <key>tcme</key>
+    <value>1.9528</value>
+    <type>real</type>
+  </param>
+  <param>
+    <name>Debug False Alarm Rate</name>
+    <key>debug_far</key>
+    <type>enum</type>
+       <option>
+           <name>Enable</name>
+           <key>True</key>
+       </option>
+       <option>
+           <name>Disable</name>
+           <key>False</key>
+       </option>
+  </param>
+  <param>
+    <name>Debug Statistics</name>
+    <key>debug_stats</key>
+    <type>enum</type>
+       <option>
+           <name>Enable</name>
+           <key>True</key>
+       </option>
+       <option>
+           <name>Disable</name>
+           <key>False</key>
+       </option>
+  </param>
+  <sink>
+    <name>in</name>
+    <type>complex</type>
+    <vlen>$ninput_samples</vlen>
+  </sink>
+  <source>
+    <name>out</name>
+    <type>float</type>
+  </source>
+</block>

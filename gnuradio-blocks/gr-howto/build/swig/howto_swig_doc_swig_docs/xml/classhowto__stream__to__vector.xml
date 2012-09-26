@@ -1,0 +1,90 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+  <compounddef id="classhowto__stream__to__vector" kind="class" prot="public">
+    <compoundname>howto_stream_to_vector</compoundname>
+    <includes refid="howto__stream__to__vector_8h" local="no">howto_stream_to_vector.h</includes>
+      <sectiondef kind="friend">
+      <memberdef kind="friend" id="classhowto__stream__to__vector_1a1986cdcccfd8bad6bea5d24100ea7c53" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>friend __GR_ATTR_IMPORT <ref refid="howto__stream__to__vector_8h_1aae257fe81cbc74909e502bfe618c2756" kindref="member">howto_stream_to_vector_sptr</ref></type>
+        <definition>__GR_ATTR_IMPORT howto_stream_to_vector_sptr howto_make_stream_to_vector</definition>
+        <argsstring>(size_t item_size, size_t nitems_per_block)</argsstring>
+        <name>howto_make_stream_to_vector</name>
+        <param>
+          <type>size_t</type>
+          <declname>item_size</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>nitems_per_block</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/zz4fap/Dropbox/gnuradio/gr-howto/include/howto_stream_to_vector.h" line="43"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-func">
+      <memberdef kind="function" id="classhowto__stream__to__vector_1afe3693739a835d5b2743702b62e68f6a" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>howto_stream_to_vector::howto_stream_to_vector</definition>
+        <argsstring>(size_t item_size, size_t nitems_per_block)</argsstring>
+        <name>howto_stream_to_vector</name>
+        <param>
+          <type>size_t</type>
+          <declname>item_size</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>nitems_per_block</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/zz4fap/Dropbox/gnuradio/gr-howto/include/howto_stream_to_vector.h" line="46"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="classhowto__stream__to__vector_1a9960a6d3ba5f1ebf34514cee74bde6b2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int howto_stream_to_vector::work</definition>
+        <argsstring>(int noutput_items, gr_vector_const_void_star &amp;input_items, gr_vector_void_star &amp;output_items)</argsstring>
+        <name>work</name>
+        <param>
+          <type>int</type>
+          <declname>noutput_items</declname>
+        </param>
+        <param>
+          <type>gr_vector_const_void_star &amp;</type>
+          <declname>input_items</declname>
+        </param>
+        <param>
+          <type>gr_vector_void_star &amp;</type>
+          <declname>output_items</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/zz4fap/Dropbox/gnuradio/gr-howto/include/howto_stream_to_vector.h" line="51"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>convert a stream of items into a stream of blocks containing nitems_per_block </para>    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/zz4fap/Dropbox/gnuradio/gr-howto/include/howto_stream_to_vector.h" line="41" bodyfile="/home/zz4fap/Dropbox/gnuradio/gr-howto/include/howto_stream_to_vector.h" bodystart="40" bodyend="52"/>
+    <listofallmembers>
+      <member refid="classhowto__stream__to__vector_1a1986cdcccfd8bad6bea5d24100ea7c53" prot="private" virt="non-virtual"><scope>howto_stream_to_vector</scope><name>howto_make_stream_to_vector</name></member>
+      <member refid="classhowto__stream__to__vector_1afe3693739a835d5b2743702b62e68f6a" prot="protected" virt="non-virtual"><scope>howto_stream_to_vector</scope><name>howto_stream_to_vector</name></member>
+      <member refid="classhowto__stream__to__vector_1a9960a6d3ba5f1ebf34514cee74bde6b2" prot="public" virt="non-virtual"><scope>howto_stream_to_vector</scope><name>work</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>
