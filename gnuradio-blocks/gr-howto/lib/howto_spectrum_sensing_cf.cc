@@ -75,6 +75,10 @@ howto_spectrum_sensing_cf::howto_spectrum_sensing_cf (float sample_rate, int nin
           d_correct_rejection_counter(0),
           d_false_alarm_rate(0),
           d_correct_rejection_rate(0),
+	  d_correct_detection_counter(0),
+	  d_false_rejection_counter(0),
+	  d_correct_detection_rate(0),
+	  d_false_rejection_rate(0),
 	  d_debug_far(debug_far), 
 	  d_debug_stats(debug_stats)
 {
@@ -107,7 +111,8 @@ howto_spectrum_sensing_cf::work (int noutput_items,
 	sort_energy();
 	zref = calculate_noise_reference(&n_zref_segs);
 	alpha = calculate_scale_factor(n_zref_segs);
-	false_alarm_rate = calculate_statistics(alpha, zref, n_zref_segs);
+	//false_alarm_rate = calculate_statistics(alpha, zref, n_zref_segs);
+	false_alarm_rate = primary_user_detection(alpha, zref, n_zref_segs, 0);
 	if(d_debug_far) printf("false_alarm_rate: %f\n",false_alarm_rate);
       	out[k] = false_alarm_rate;
   }
@@ -156,9 +161,9 @@ bool howto_spectrum_sensing_cf::sort_energy() {
 float howto_spectrum_sensing_cf::calculate_noise_reference(int* n_zref_segs) {
 	
 	float limiar, energy[d_nsub_bands];
-	int I = 0;
-	
-	for(I=20;I<d_nsub_bands;I++) {
+	int I = (d_nsub_bands < 20)?3:20;
+
+	for(;I<d_nsub_bands;I++) {
 		limiar = (float)(d_tcme/I);
 		energy[I] = 0.0;
 		for(int k=0;k<I;k++) {
@@ -174,23 +179,12 @@ float howto_spectrum_sensing_cf::calculate_noise_reference(int* n_zref_segs) {
 
 // Calculate the scale factor.
 float howto_spectrum_sensing_cf::calculate_scale_factor(int x) {
-	
-	float value = 0.0;
-	// Values caculated for M=16, Pfa=0.0001 and I varying from 1 to 128, i.e., (2048 points IFFT)/M.
-	float a[] = {13.39, -10.29, 0.007391, 1.007e+12, 0.006561, 0.01239, 1.71e+10, 0.2332};
-	float b[] = {-0.9831, -16.15, 26.53, -240.2, 27.85, 137.8, -73.25, -112.3};
-	float c[] = {1.398, 12.08, 4.333, 46.41, 22.15, 59.77, 15.45, 125.3};
-	
-	value = a[0]*exp(-pow(((x-b[0])/c[0]),2));
-	value = value + a[1]*exp(-pow(((x-b[1])/c[1]),2));
-	value = value + a[2]*exp(-pow(((x-b[2])/c[2]),2));
-	value = value + a[3]*exp(-pow(((x-b[3])/c[3]),2)); 
-	value = value + a[4]*exp(-pow(((x-b[4])/c[4]),2)); 
-	value = value + a[5]*exp(-pow(((x-b[5])/c[5]),2)); 
-	value = value + a[6]*exp(-pow(((x-b[6])/c[6]),2));
-	value = value + a[7]*exp(-pow(((x-b[7])/c[7]),2));
-	
-	return value;
+	float alpha = 0.0;
+	int samples_per_band = d_ninput_samples/d_nsub_bands;
+
+	boost::math::fisher_f_distribution<> fd(2*samples_per_band, 2*samples_per_band*x);
+	alpha = quantile(fd, (1-d_pfa));
+	return alpha/x;
 }
 
 float howto_spectrum_sensing_cf::calculate_statistics(float alpha, float zref, int I) {
@@ -212,6 +206,24 @@ float howto_spectrum_sensing_cf::calculate_statistics(float alpha, float zref, i
 	d_correct_rejection_rate = (float)d_correct_rejection_counter/d_trials_counter;
 	
 	return d_false_alarm_rate;
+}
+
+float howto_spectrum_sensing_cf::primary_user_detection(float alpha, float zref, int I, int primary_user_band_location) {
+
+	float ratio = 0.0;
+
+	d_trials_counter++;
+	ratio = segment[primary_user_band_location]/zref;
+	if(ratio > alpha) {
+		d_correct_detection_counter++;
+	} else {
+		d_false_rejection_counter++;
+		if(d_debug_stats) printf("ratio: %f - alpha: %f - segment[%d]: %f - zref: %f - I: %d\n",ratio,alpha,primary_user_band_location,segment[primary_user_band_location],zref,I);
+	}
+	d_correct_detection_rate = (float)d_correct_detection_counter/d_trials_counter;
+	d_false_rejection_rate = (float)d_false_rejection_counter/d_trials_counter;
+
+	return d_correct_detection_rate;
 }
 
 /* REFERENCES

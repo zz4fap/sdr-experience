@@ -27,6 +27,7 @@
 #include <gr_sync_interpolator.h>
 #include <gr_sync_block.h>
 #include <howto_api.h>
+#include<boost/math/distributions.hpp>
 
 class howto_spectrum_sensing_cf;
 
@@ -59,10 +60,10 @@ private:
   // access the private constructor.
   friend HOWTO_API howto_spectrum_sensing_cf_sptr howto_make_spectrum_sensing_cf (float sample_rate, int ninput_samples, int nsub_bands, float pfd, float pfa, float tcme, bool debug_far,bool debug_stats);
 
-  float d_sample_rate, d_pfd, d_pfa, d_tcme, d_false_alarm_rate, d_correct_rejection_rate;
+  float d_sample_rate, d_pfd, d_pfa, d_tcme, d_false_alarm_rate, d_correct_rejection_rate, d_correct_detection_rate, d_false_rejection_rate;
   float *segment, *sorted_segment;
   int d_ninput_samples, d_nsub_bands;
-  unsigned int d_false_alarm_counter, d_correct_rejection_counter, d_trials_counter;
+  unsigned int d_false_alarm_counter, d_correct_rejection_counter, d_correct_detection_counter, d_false_rejection_counter, d_trials_counter;
   bool d_debug_far, d_debug_stats;
 
   howto_spectrum_sensing_cf (float sample_rate, int ninput_samples, int nsub_bands, float pfd, float pfa, float tcme, bool debug_far,bool debug_stats);  	// private constructor
@@ -72,6 +73,7 @@ private:
   float calculate_noise_reference(int* n_zref_segs);
   float calculate_scale_factor(int x);
   float calculate_statistics(float alpha, float zref, int I);
+  float primary_user_detection(float alpha, float zref, int I, int primary_user_band_location);
 
  public:
   ~howto_spectrum_sensing_cf ();	// public destructor

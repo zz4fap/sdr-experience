@@ -2,7 +2,7 @@
 ##################################################
 # Gnuradio Python Flow Graph
 # Title: Top Block
-# Generated: Tue Sep 25 21:03:53 2012
+# Generated: Wed Sep 26 23:28:15 2012
 ##################################################
 
 from gnuradio import eng_notation
@@ -41,7 +41,7 @@ class top_block(grc_wxgui.top_block_gui):
 			ref_level=0,
 			ref_scale=2.0,
 			sample_rate=samp_rate,
-			fft_size=2048,
+			fft_size=512,
 			fft_rate=15,
 			average=False,
 			avg_alpha=None,
@@ -68,7 +68,7 @@ class top_block(grc_wxgui.top_block_gui):
 		
 		self.rtl2832_source_0.set_sample_rate(samp_rate)
 		
-		self.rtl2832_source_0.set_frequency(90e6)
+		self.rtl2832_source_0.set_frequency(91.9e6)
 		
 		
 		
@@ -76,21 +76,21 @@ class top_block(grc_wxgui.top_block_gui):
 		self.rtl2832_source_0.set_relative_gain(True)
 		self.rtl2832_source_0.set_gain(1)
 		  
-		self.howto_stream_to_vector_0 = howto.stream_to_vector(gr.sizeof_gr_complex*1, 2048)
-		self.howto_spectrum_sensing_cf_0 = howto.spectrum_sensing_cf(samp_rate,2048,128,0.001,0.0001,1.9528,True,False)
+		self.howto_stream_to_vector_0 = howto.stream_to_vector(gr.sizeof_gr_complex*1, 512)
+		self.howto_spectrum_sensing_cf_0 = howto.spectrum_sensing_cf(samp_rate,512,12,0.001,0.0001,1.545,True,False)
 		self.gr_throttle_0 = gr.throttle(gr.sizeof_gr_complex*1, samp_rate)
 		self.gr_null_sink_0 = gr.null_sink(gr.sizeof_float*1)
-		self.fft_vxx_0 = fft.fft_vcc(2048, True, (window.blackmanharris(1024)), False, 1)
+		self.fft_vxx_0 = fft.fft_vcc(512, True, (window.blackmanharris(1024)), False, 1)
 
 		##################################################
 		# Connections
 		##################################################
 		self.connect((self.fft_vxx_0, 0), (self.howto_spectrum_sensing_cf_0, 0))
 		self.connect((self.howto_stream_to_vector_0, 0), (self.fft_vxx_0, 0))
+		self.connect((self.gr_throttle_0, 0), (self.howto_stream_to_vector_0, 0))
 		self.connect((self.gr_throttle_0, 0), (self.wxgui_fftsink2_0, 0))
-		self.connect((self.rtl2832_source_0, 0), (self.howto_stream_to_vector_0, 0))
-		self.connect((self.rtl2832_source_0, 0), (self.gr_throttle_0, 0))
 		self.connect((self.howto_spectrum_sensing_cf_0, 0), (self.gr_null_sink_0, 0))
+		self.connect((self.rtl2832_source_0, 0), (self.gr_throttle_0, 0))
 
 	def get_samp_rate(self):
 		return self.samp_rate
