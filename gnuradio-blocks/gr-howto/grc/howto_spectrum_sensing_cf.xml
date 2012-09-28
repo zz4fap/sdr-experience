@@ -4,10 +4,10 @@
   <key>howto_spectrum_sensing_cf</key>
   <category>HOWTO</category>
   <import>import howto</import>
-  <make>howto.spectrum_sensing_cf($sample_rate,$ninput_samples,$nsub_bands,$pfd,$pfa,$tcme,$debug_far,$debug_stats)</make>
+  <make>howto.spectrum_sensing_cf($sample_rate,$ninput_samples,$samples_per_band,$pfd,$pfa,$tcme,$debug_far,$debug_cdr,$debug_stats,$band_location)</make>
   <callback>set_sample_rate($sample_rate)</callback>
   <callback>set_ninput_samples($ninput_samples)</callback>
-  <callback>set_nsub_bands($nsub_bands)</callback>
+  <callback>set_samples_per_band($samples_per_band)</callback>
   <callback>set_pfd($pfd)</callback>
   <callback>set_pfa($pfa)</callback>
   <callback>set_tcme($tcme)</callback>
@@ -19,13 +19,13 @@
   <param>
     <name>FFT Size</name>
     <key>ninput_samples</key>
-    <value>2048</value>
+    <value>4096</value>
     <type>int</type>
   </param>
   <param>
-    <name>Number of subbands</name>
-    <key>nsub_bands</key>
-    <value>128</value>
+    <name>Samples per subband</name>
+    <key>samples_per_band</key>
+    <value>16</value>
     <type>int</type>
   </param>
   <param>
@@ -51,25 +51,44 @@
     <key>debug_far</key>
     <type>enum</type>
        <option>
+           <name>Disable</name>
+           <key>False</key>
+       </option>
+       <option>
            <name>Enable</name>
            <key>True</key>
        </option>
+  </param>
+  <param>
+    <name>Debug Correct Detection Rate</name>
+    <key>debug_cdr</key>
+    <type>enum</type>
        <option>
            <name>Disable</name>
            <key>False</key>
        </option>
+       <option>
+           <name>Enable</name>
+           <key>True</key>
+       </option>
+  </param>
+  <param>
+    <name>Band Location of the Primary User</name>
+    <key>band_location</key>
+    <value>0</value>
+    <type>int</type>
   </param>
   <param>
     <name>Debug Statistics</name>
     <key>debug_stats</key>
     <type>enum</type>
        <option>
-           <name>Enable</name>
-           <key>True</key>
-       </option>
-       <option>
            <name>Disable</name>
            <key>False</key>
+       </option>
+       <option>
+           <name>Enable</name>
+           <key>True</key>
        </option>
   </param>
   <sink>

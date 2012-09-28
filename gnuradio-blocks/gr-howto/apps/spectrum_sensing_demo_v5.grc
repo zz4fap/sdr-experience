@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='ASCII'?>
 <flow_graph>
-  <timestamp>Wed Sep 26 22:38:13 2012</timestamp>
+  <timestamp>Thu Sep 27 19:24:11 2012</timestamp>
   <block>
     <key>options</key>
     <param>
@@ -380,12 +380,20 @@
       <value>True</value>
     </param>
     <param>
+      <key>debug_cdr</key>
+      <value>False</value>
+    </param>
+    <param>
+      <key>band_location</key>
+      <value>0</value>
+    </param>
+    <param>
       <key>debug_stats</key>
       <value>False</value>
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(777, 290)</value>
+      <value>(759, 228)</value>
     </param>
     <param>
       <key>_rotation</key>

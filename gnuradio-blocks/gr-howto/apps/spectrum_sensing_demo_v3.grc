@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='ASCII'?>
 <flow_graph>
-  <timestamp>Tue Sep 25 20:10:50 2012</timestamp>
+  <timestamp>Thu Sep 27 19:49:55 2012</timestamp>
   <block>
     <key>options</key>
     <param>
@@ -115,41 +115,6 @@
     </param>
   </block>
   <block>
-    <key>gr_file_sink</key>
-    <param>
-      <key>id</key>
-      <value>gr_file_sink_0</value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>file</key>
-      <value>/home/zz4fap/Dropbox/gnuradio/gr-howto/false_alarm_rate.dat</value>
-    </param>
-    <param>
-      <key>type</key>
-      <value>float</value>
-    </param>
-    <param>
-      <key>vlen</key>
-      <value>1</value>
-    </param>
-    <param>
-      <key>unbuffered</key>
-      <value>False</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(995, 219)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-  </block>
-  <block>
     <key>gr_noise_source_x</key>
     <param>
       <key>id</key>
@@ -209,57 +174,6 @@
     <param>
       <key>_coordinate</key>
       <value>(260, 279)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-  </block>
-  <block>
-    <key>howto_spectrum_sensing_cf</key>
-    <param>
-      <key>id</key>
-      <value>howto_spectrum_sensing_cf_0</value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>sample_rate</key>
-      <value>samp_rate</value>
-    </param>
-    <param>
-      <key>ninput_samples</key>
-      <value>2048</value>
-    </param>
-    <param>
-      <key>nsub_bands</key>
-      <value>128</value>
-    </param>
-    <param>
-      <key>pfd</key>
-      <value>0.001</value>
-    </param>
-    <param>
-      <key>pfa</key>
-      <value>0.0001</value>
-    </param>
-    <param>
-      <key>tcme</key>
-      <value>1.9528</value>
-    </param>
-    <param>
-      <key>debug_far</key>
-      <value>False</value>
-    </param>
-    <param>
-      <key>debug_stats</key>
-      <value>False</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(777, 290)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -400,6 +314,92 @@
       <value>0</value>
     </param>
   </block>
+  <block>
+    <key>gr_null_sink</key>
+    <param>
+      <key>id</key>
+      <value>gr_null_sink_0</value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>type</key>
+      <value>float</value>
+    </param>
+    <param>
+      <key>vlen</key>
+      <value>1</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(1089, 301)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+  </block>
+  <block>
+    <key>howto_spectrum_sensing_cf</key>
+    <param>
+      <key>id</key>
+      <value>howto_spectrum_sensing_cf_0</value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>sample_rate</key>
+      <value>samp_rate</value>
+    </param>
+    <param>
+      <key>ninput_samples</key>
+      <value>2048</value>
+    </param>
+    <param>
+      <key>nsub_bands</key>
+      <value>128</value>
+    </param>
+    <param>
+      <key>pfd</key>
+      <value>0.001</value>
+    </param>
+    <param>
+      <key>pfa</key>
+      <value>0.0001</value>
+    </param>
+    <param>
+      <key>tcme</key>
+      <value>1.9528</value>
+    </param>
+    <param>
+      <key>debug_far</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>debug_cdr</key>
+      <value>False</value>
+    </param>
+    <param>
+      <key>band_location</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>debug_stats</key>
+      <value>False</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(777, 290)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+  </block>
   <connection>
     <source_block_id>fft_vxx_0</source_block_id>
     <sink_block_id>howto_spectrum_sensing_cf_0</sink_block_id>
@@ -425,14 +425,14 @@
     <sink_key>0</sink_key>
   </connection>
   <connection>
-    <source_block_id>howto_spectrum_sensing_cf_0</source_block_id>
-    <sink_block_id>gr_file_sink_0</sink_block_id>
+    <source_block_id>gr_noise_source_x_0</source_block_id>
+    <sink_block_id>gr_throttle_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>
   <connection>
-    <source_block_id>gr_noise_source_x_0</source_block_id>
-    <sink_block_id>gr_throttle_0</sink_block_id>
+    <source_block_id>howto_spectrum_sensing_cf_0</source_block_id>
+    <sink_block_id>gr_null_sink_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>
