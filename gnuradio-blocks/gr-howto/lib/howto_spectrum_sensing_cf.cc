@@ -88,9 +88,20 @@ howto_spectrum_sensing_cf::howto_spectrum_sensing_cf (float sample_rate, int nin
 	d_useless_segment = (int)ceil((float)(200000/delta_f));
 	d_usefull_samples = d_ninput_samples - 6*d_useless_segment;
 	d_nsub_bands = (int)floor(d_usefull_samples/d_samples_per_band);
-	new_in = new gr_complex[d_usefull_samples]; 
-	segment = new float[(int)floor(d_usefull_samples/d_samples_per_band)];
-	sorted_segment = new float[(int)floor(d_usefull_samples/d_samples_per_band)];
+	new_in = new gr_complex[d_usefull_samples];
+	int segment_array_size = (int)floor(d_usefull_samples/d_samples_per_band);
+	segment = new float[segment_array_size];
+	sorted_segment = new float[segment_array_size];
+
+	memset(new_in,0,d_usefull_samples*sizeof(gr_complex));
+	memset(segment,0,segment_array_size);
+	memset(sorted_segment,0,segment_array_size);
+
+	printf("Delta Frequency: %f\n",delta_f);
+	printf("Useless segment size: %d\n",d_useless_segment);
+	printf("Usefull segment size: %d\n",d_usefull_samples);
+	printf("Number of subbands: %d\n",d_nsub_bands);
+	printf("Size of segment array: %d\n",segment_array_size);
 }
 
 /*
@@ -115,14 +126,13 @@ howto_spectrum_sensing_cf::work (int noutput_items,
   int n_zref_segs = 0;
 
   for(int k=0;k<noutput_items;k++) {
-	spectrum_mapping(in, k);
-	segment_spectrum();
+	segment_spectrum(in, k);
 	sort_energy();
 	zref = calculate_noise_reference(&n_zref_segs);
 	alpha = calculate_scale_factor(n_zref_segs);
 	if(d_debug_far) {
 		false_alarm_rate = calculate_statistics(alpha, zref, n_zref_segs);
-		printf("false_alarm_rate: %f\n",false_alarm_rate);
+		//printf("false_alarm_rate: %f\n",false_alarm_rate);
 		out[k] = false_alarm_rate;
 	}
 	if(d_debug_cdr) {
@@ -136,35 +146,30 @@ howto_spectrum_sensing_cf::work (int noutput_items,
   return noutput_items;
 }
 
-void howto_spectrum_sensing_cf::spectrum_mapping(const gr_complex *in, int vector_number) {
-
-	//TODO: These two for can be joined and as consequence just one for is used.
-	//TODO: The energi of the segment should be calculated here in order to save some complexity...
-	// fisrt half of the usefull spectrum.
-	for(int i=d_useless_segment;i<(d_ninput_samples/2 - 2*d_useless_segment);i++) {
-		new_in[i-d_useless_segment] = in[vector_number*d_ninput_samples + i];
-	}
-
-	// second half of the usefull spectrum.
-	for(int i=(d_ninput_samples/2 + 2*d_useless_segment);i<(d_ninput_samples - d_useless_segment);i++) {
-		new_in[i-(d_ninput_samples/2 + 2*d_useless_segment)+d_usefull_samples/2] = in[vector_number*d_ninput_samples + i];
-	}
-}
-
 /* Segment the spectrum into blocks with the sum of the energies.*/
-bool howto_spectrum_sensing_cf::segment_spectrum() {
+void howto_spectrum_sensing_cf::segment_spectrum(const gr_complex *in, int vector_number) {
+	int pos = 0;
 
-	for(int k=0;k<d_nsub_bands;k++) {
-		segment[k] = 0.0;
-		for(int i=0;i<d_samples_per_band;i++) {
-			segment[k] = segment[k] + pow(abs(new_in[k*d_samples_per_band + i]),2);
+	for(int i=0;i<d_nsub_bands;i++) {
+		segment[i] = 0.0;
+		for(int k=0;k<d_samples_per_band;k++) {
+			if((i*d_samples_per_band + k + d_useless_segment) <= (d_ninput_samples/2 - 2*d_useless_segment)) {
+				pos = vector_number*d_ninput_samples + d_useless_segment + i*d_samples_per_band + k;
+				//printf("i: %d - k: %d - pos1: %d\n",i,k,(d_useless_segment + (i*d_samples_per_band) + k));
+				segment[i] = segment[i] + pow(abs(in[pos]),2);
+			} else if((i*d_samples_per_band + k + 5*d_useless_segment) > (d_ninput_samples/2 + 2*d_useless_segment) && (i*d_samples_per_band + k + 5*d_useless_segment) < (d_ninput_samples - d_useless_segment)) {
+				pos = vector_number*d_ninput_samples + i*d_samples_per_band + k + 5*d_useless_segment;
+				//printf("i: %d - k: %d - pos2: %d\n",i,k,(i*d_samples_per_band + k + 5*d_useless_segment));
+				segment[i] = segment[i] + pow(abs(in[pos]),2);
+			} else {
+				printf("Error!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+			}
 		}
-		sorted_segment[k] = segment[k];
+		sorted_segment[i] = segment[i];
 	}
-	return true;
 }
 
-/*This is the implemenatation of the algorithm proposed in reference [3]*/
+/*This is the implementation of the algorithm proposed in reference [3]*/
 bool howto_spectrum_sensing_cf::sort_energy() {
 	float temp;
 

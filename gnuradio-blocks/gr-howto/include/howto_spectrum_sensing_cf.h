@@ -69,8 +69,7 @@ private:
 
   howto_spectrum_sensing_cf (float sample_rate, int ninput_samples, int samples_per_band, float pfd, float pfa, float tcme, bool debug_far, bool debug_cdr, bool debug_stats, int band_location);  	// private constructor
 
-  void spectrum_mapping(const gr_complex *in, int vector_number);
-  bool segment_spectrum();
+  void segment_spectrum(const gr_complex *in, int vector_number);
   bool sort_energy();
   float calculate_noise_reference(int* n_zref_segs);
   float calculate_scale_factor(int x);
