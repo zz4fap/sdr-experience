@@ -4,7 +4,7 @@
   <key>howto_spectrum_sensing_cf</key>
   <category>HOWTO</category>
   <import>import howto</import>
-  <make>howto.spectrum_sensing_cf($sample_rate,$ninput_samples,$samples_per_band,$pfd,$pfa,$tcme,$debug_far,$debug_cdr,$debug_stats,$band_location,$noutput_samples)</make>
+  <make>howto.spectrum_sensing_cf($sample_rate,$ninput_samples,$samples_per_band,$pfd,$pfa,$tcme,$debug_far,$debug_cdr,$debug_stats,$band_location,$noutput_samples,$useless_bandwidth)</make>
   <callback>set_sample_rate($sample_rate)</callback>
   <callback>set_ninput_samples($ninput_samples)</callback>
   <callback>set_samples_per_band($samples_per_band)</callback>
@@ -95,6 +95,12 @@
     <name>Number of Output Samples</name>
     <key>noutput_samples</key>
     <value>127</value>
+    <type>int</type>
+  </param>  
+  <param>
+    <name>Useless Bandwidth</name>
+    <key>useless_bandwidth</key>
+    <value>200000</value>
     <type>int</type>
   </param>
   <sink>

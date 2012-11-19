@@ -38,9 +38,9 @@
  * Create a new instance of howto_square_ff and return
  * a boost shared_ptr.  This is effectively the public constructor.
  */
-howto_spectrum_sensing_cf_sptr howto_make_spectrum_sensing_cf(float sample_rate, int ninput_samples, int samples_per_band, float pfd, float pfa, float tcme, bool debug_far, bool debug_cdr, bool debug_stats, int band_location, int noutput_samples)
+howto_spectrum_sensing_cf_sptr howto_make_spectrum_sensing_cf(float sample_rate, int ninput_samples, int samples_per_band, float pfd, float pfa, float tcme, bool debug_far, bool debug_cdr, bool debug_stats, int band_location, int noutput_samples, int useless_bandwidth)
 {
-  return gnuradio::get_initial_sptr(new howto_spectrum_sensing_cf (sample_rate, ninput_samples, samples_per_band, pfd, pfa, tcme, debug_far, debug_cdr, debug_stats, band_location, noutput_samples));
+  return gnuradio::get_initial_sptr(new howto_spectrum_sensing_cf (sample_rate, ninput_samples, samples_per_band, pfd, pfa, tcme, debug_far, debug_cdr, debug_stats, band_location, noutput_samples, useless_bandwidth));
 }
 
 /*
@@ -60,7 +60,7 @@ static const int MAX_OUT = 1;	// maximum number of output streams
 /*
  * The private constructor
  */
-howto_spectrum_sensing_cf::howto_spectrum_sensing_cf (float sample_rate, int ninput_samples, int samples_per_band, float pfd, float pfa, float tcme, bool debug_far, bool debug_cdr, bool debug_stats, int band_location, int noutput_samples)
+howto_spectrum_sensing_cf::howto_spectrum_sensing_cf (float sample_rate, int ninput_samples, int samples_per_band, float pfd, float pfa, float tcme, bool debug_far, bool debug_cdr, bool debug_stats, int band_location, int noutput_samples, int useless_bandwidth)
 	: gr_sync_block ("spectrum_sensing_cf",
 	  gr_make_io_signature (MIN_IN, MAX_IN, ninput_samples*sizeof (gr_complex)),
 	  gr_make_io_signature (MIN_OUT, MAX_OUT, noutput_samples*sizeof (float))),
@@ -83,10 +83,11 @@ howto_spectrum_sensing_cf::howto_spectrum_sensing_cf (float sample_rate, int nin
 	  d_debug_cdr(debug_cdr),
 	  d_debug_stats(debug_stats),
 	  d_band_location(band_location),
-	  d_noutput_samples(noutput_samples)
+	  d_noutput_samples(noutput_samples),
+	  d_useless_bandwidth(useless_bandwidth)
 {
 	float delta_f = d_sample_rate/d_ninput_samples;
-	d_useless_segment = (int)ceil((float)(200000/delta_f));
+	d_useless_segment = (int)ceil((float)(d_useless_bandwidth/delta_f));
 	d_usefull_samples = d_ninput_samples - 6*d_useless_segment;
 	d_nsub_bands = (int)floor(d_usefull_samples/d_samples_per_band);
 	new_in = new gr_complex[d_usefull_samples];
@@ -131,7 +132,7 @@ howto_spectrum_sensing_cf::work (int noutput_items,
 	alpha = calculate_scale_factor(n_zref_segs);
 	if(d_debug_far) {
 		false_alarm_rate = calculate_statistics(alpha, zref, n_zref_segs);
-		//printf("false_alarm_rate: %f\n",false_alarm_rate);
+		printf("false_alarm_rate: %f\n",false_alarm_rate);
 		//out[k] = false_alarm_rate;
 	}
 	if(d_debug_cdr) {
