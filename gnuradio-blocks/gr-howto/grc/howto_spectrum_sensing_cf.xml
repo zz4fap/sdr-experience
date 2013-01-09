@@ -4,13 +4,14 @@
   <key>howto_spectrum_sensing_cf</key>
   <category>HOWTO</category>
   <import>import howto</import>
-  <make>howto.spectrum_sensing_cf($sample_rate,$ninput_samples,$samples_per_band,$pfd,$pfa,$tcme,$debug_far,$debug_cdr,$debug_stats,$band_location,$noutput_samples,$useless_bandwidth)</make>
+  <make>howto.spectrum_sensing_cf($sample_rate,$ninput_samples,$samples_per_band,$pfd,$pfa,$tcme,$output_far,$debug_stats,$band_location,$noutput_samples,$useless_band)</make>
   <callback>set_sample_rate($sample_rate)</callback>
   <callback>set_ninput_samples($ninput_samples)</callback>
   <callback>set_samples_per_band($samples_per_band)</callback>
   <callback>set_pfd($pfd)</callback>
   <callback>set_pfa($pfa)</callback>
   <callback>set_tcme($tcme)</callback>
+  <callback>set_useless_band($useless_band)</callback>
   <param>
     <name>Sample Rate</name>
     <key>sample_rate</key>
@@ -47,29 +48,16 @@
     <type>real</type>
   </param>
   <param>
-    <name>Debug False Alarm Rate</name>
-    <key>debug_far</key>
+    <name>Output False Alarm Rate</name>
+    <key>output_far</key>
     <type>enum</type>
-       <option>
-           <name>Disable</name>
-           <key>False</key>
-       </option>
        <option>
            <name>Enable</name>
            <key>True</key>
        </option>
-  </param>
-  <param>
-    <name>Debug Correct Detection Rate</name>
-    <key>debug_cdr</key>
-    <type>enum</type>
        <option>
            <name>Disable</name>
            <key>False</key>
-       </option>
-       <option>
-           <name>Enable</name>
-           <key>True</key>
        </option>
   </param>
   <param>
@@ -96,12 +84,12 @@
     <key>noutput_samples</key>
     <value>127</value>
     <type>int</type>
-  </param>  
+  </param>
   <param>
-    <name>Useless Bandwidth</name>
-    <key>useless_bandwidth</key>
-    <value>200000</value>
-    <type>int</type>
+    <name>Useless Band in Hz</name>
+    <key>useless_band</key>
+    <value>200000.0</value>
+    <type>real</type>
   </param>
   <sink>
     <name>in</name>
@@ -111,6 +99,5 @@
   <source>
     <name>out</name>
     <type>float</type>
-    <vlen>$noutput_samples</vlen>
   </source>
 </block>
