@@ -2,7 +2,7 @@
 ##################################################
 # Gnuradio Python Flow Graph
 # Title: Top Block
-# Generated: Wed Jan  9 19:24:29 2013
+# Generated: Wed Jan  9 21:52:43 2013
 ##################################################
 
 from gnuradio import eng_notation
@@ -33,7 +33,7 @@ class top_block(grc_wxgui.top_block_gui):
 		# Blocks
 		##################################################
 		self.howto_stream_to_vector_0 = howto.stream_to_vector(gr.sizeof_gr_complex*1, 4096)
-		self.howto_spectrum_sensing_cf_0 = howto.spectrum_sensing_cf(samp_rate,fft_size,16,0.001,0.0001,1.9528,True,False,0,127,200000.0)
+		self.howto_spectrum_sensing_cf_0 = howto.spectrum_sensing_cf(samp_rate,fft_size,16,0.001,0.0001,1.9528,True,False,0,200000.0)
 		self.gr_null_sink_0 = gr.null_sink(gr.sizeof_float*1)
 		self.gr_noise_source_x_0 = gr.noise_source_c(gr.GR_GAUSSIAN, 1, 42)
 		self.fft_vxx_0 = fft.fft_vcc(fft_size, True, (window.blackmanharris(1024)), False, 1)

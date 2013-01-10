@@ -38,9 +38,9 @@
  * Create a new instance of howto_square_ff and return
  * a boost shared_ptr.  This is effectively the public constructor.
  */
-howto_spectrum_sensing_cf_sptr howto_make_spectrum_sensing_cf(float sample_rate, int ninput_samples, int samples_per_band, float pfd, float pfa, float tcme, bool output_far, bool debug_stats, int band_location, int noutput_samples, float useless_band)
+howto_spectrum_sensing_cf_sptr howto_make_spectrum_sensing_cf(float sample_rate, int ninput_samples, int samples_per_band, float pfd, float pfa, float tcme, bool output_far, bool debug_stats, int band_location, float useless_band)
 {
-  return gnuradio::get_initial_sptr(new howto_spectrum_sensing_cf (sample_rate, ninput_samples, samples_per_band, pfd, pfa, tcme, output_far, debug_stats, band_location, noutput_samples, useless_band));
+  return gnuradio::get_initial_sptr(new howto_spectrum_sensing_cf (sample_rate, ninput_samples, samples_per_band, pfd, pfa, tcme, output_far, debug_stats, band_location, useless_band));
 }
 
 /*
@@ -60,7 +60,7 @@ static const int MAX_OUT = 1;	// maximum number of output streams
 /*
  * The private constructor
  */
-howto_spectrum_sensing_cf::howto_spectrum_sensing_cf (float sample_rate, int ninput_samples, int samples_per_band, float pfd, float pfa, float tcme, bool output_far, bool debug_stats, int band_location, int noutput_samples, float useless_band)
+howto_spectrum_sensing_cf::howto_spectrum_sensing_cf (float sample_rate, int ninput_samples, int samples_per_band, float pfd, float pfa, float tcme, bool output_far, bool debug_stats, int band_location, float useless_band)
 	: gr_sync_block ("spectrum_sensing_cf",
 	  gr_make_io_signature (MIN_IN, MAX_IN, ninput_samples*sizeof (gr_complex)),
 	  gr_make_io_signature (MIN_OUT, MAX_OUT, sizeof (float))),
@@ -82,7 +82,6 @@ howto_spectrum_sensing_cf::howto_spectrum_sensing_cf (float sample_rate, int nin
 	  d_output_far(output_far),
 	  d_debug_stats(debug_stats),
 	  d_band_location(band_location),
-	  d_noutput_samples(noutput_samples),
 	  d_useless_band(useless_band)
 {	
 	float delta_f = d_sample_rate/d_ninput_samples;
