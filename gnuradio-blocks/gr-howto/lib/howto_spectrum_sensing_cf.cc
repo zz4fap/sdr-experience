@@ -209,8 +209,9 @@ float howto_spectrum_sensing_cf::calculate_scale_factor(int x) {
 float howto_spectrum_sensing_cf::calculate_false_alarm_rate(float alpha, float zref, int I) {
 	
 	float ratio;
-   int false_alarm_counter = 0;
+   int false_alarm_counter;
 
+   false_alarm_counter = 0;
 	for(int k=0;k<d_nsub_bands;k++) {
 		ratio = segment[k]/zref;
 		if(ratio > alpha) {
@@ -218,7 +219,7 @@ float howto_spectrum_sensing_cf::calculate_false_alarm_rate(float alpha, float z
 			false_alarm_counter++;
 		}
 	}
-	
+
 	return (float)false_alarm_counter/d_nsub_bands;
 }
 
