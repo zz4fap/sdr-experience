@@ -60,10 +60,9 @@ private:
   // access the private constructor.
   friend HOWTO_API howto_spectrum_sensing_cf_sptr howto_make_spectrum_sensing_cf (float sample_rate, int ninput_samples, int samples_per_band, float pfd, float pfa, float tcme, bool output_far, bool debug_stats, int band_location, float useless_band);
 
-  float d_sample_rate, d_pfd, d_pfa, d_tcme, d_false_alarm_rate, d_correct_rejection_rate, d_correct_detection_rate, d_false_rejection_rate, d_useless_band;
+  float d_sample_rate, d_pfd, d_pfa, d_tcme, d_useless_band;
   float *segment, *sorted_segment;
   int d_ninput_samples, d_samples_per_band, d_band_location, d_useless_segment, d_usefull_samples, d_nsub_bands;
-  unsigned int d_false_alarm_counter, d_correct_rejection_counter, d_correct_detection_counter, d_false_rejection_counter, d_trials_counter;
   bool d_output_far, d_debug_stats;
   gr_complex *new_in;
 
@@ -96,9 +95,6 @@ private:
 	
   float tcme() const {return d_tcme;}
   void set_tcme(float tcme) {d_tcme = tcme;}
-	
-  float false_alarm_rate() {return d_false_alarm_rate;}
-  float correct_rejection() {return d_correct_rejection_rate;}
 
   float useless_band() const {return d_useless_band;}
   void set_useless_band(float p) {d_useless_band = p;}

@@ -60,31 +60,22 @@ static const int MAX_OUT = 1;	// maximum number of output streams
 /*
  * The private constructor
  */
-howto_spectrum_sensing_cf::howto_spectrum_sensing_cf (float sample_rate, int ninput_samples, int samples_per_band, float pfd, float pfa, float tcme, bool output_far, bool debug_stats, int band_location, float useless_band)
-	: gr_sync_block ("spectrum_sensing_cf",
-	  gr_make_io_signature (MIN_IN, MAX_IN, ninput_samples*sizeof (gr_complex)),
-	  gr_make_io_signature (MIN_OUT, MAX_OUT, sizeof (float))),
-	  d_sample_rate(sample_rate),
-	  d_ninput_samples(ninput_samples),
- 	  d_samples_per_band(samples_per_band),
-	  d_pfd(pfd),
-  	  d_pfa(pfa),
-	  d_tcme(tcme),
-          d_trials_counter(0),
-          d_false_alarm_counter(0),
-          d_correct_rejection_counter(0),
-          d_false_alarm_rate(0),
-          d_correct_rejection_rate(0),
-	  d_correct_detection_counter(0),
-	  d_false_rejection_counter(0),
-	  d_correct_detection_rate(0),
-	  d_false_rejection_rate(0),
-	  d_output_far(output_far),
-	  d_debug_stats(debug_stats),
-	  d_band_location(band_location),
-	  d_useless_band(useless_band)
+howto_spectrum_sensing_cf::howto_spectrum_sensing_cf (float sample_rate, int ninput_samples, int samples_per_band, float pfd, float pfa, float tcme, bool output_far, bool debug_stats, int band_location, float useless_band) 
+      : gr_sync_block ("spectrum_sensing_cf",
+	   gr_make_io_signature (MIN_IN, MAX_IN, ninput_samples*sizeof (gr_complex)),
+	   gr_make_io_signature (MIN_OUT, MAX_OUT, sizeof (float))),
+	   d_sample_rate(sample_rate),
+	   d_ninput_samples(ninput_samples),
+ 	   d_samples_per_band(samples_per_band),
+	   d_pfd(pfd),
+  	   d_pfa(pfa),
+	   d_tcme(tcme),
+	   d_output_far(output_far),
+	   d_debug_stats(debug_stats),
+	   d_band_location(band_location),
+	   d_useless_band(useless_band)
 {	
-	float delta_f = d_sample_rate/d_ninput_samples;
+   float delta_f = d_sample_rate/d_ninput_samples;
 	d_useless_segment = (int)ceil(d_useless_band/delta_f);
 	d_usefull_samples = d_ninput_samples - 6*d_useless_segment;
 	d_nsub_bands = (int)floor(d_usefull_samples/d_samples_per_band);
@@ -96,11 +87,13 @@ howto_spectrum_sensing_cf::howto_spectrum_sensing_cf (float sample_rate, int nin
 	memset(segment,0,d_nsub_bands*sizeof(float));
 	memset(sorted_segment,0,d_nsub_bands*sizeof(float));
 
-	printf("Useless band: %f\n",d_useless_band);
-	printf("Delta Frequency: %f\n",delta_f);
-	printf("Useless segment size: %d\n",d_useless_segment);
-	printf("Usefull segment size: %d\n",d_usefull_samples);
-	printf("Number of subbands: %d\n",d_nsub_bands);
+   if(d_debug_stats) {
+	   printf("Useless band: %f\n",d_useless_band);
+	   printf("Delta Frequency: %f\n",delta_f);
+	   printf("Useless segment size: %d\n",d_useless_segment);
+	   printf("Usefull segment size: %d\n",d_usefull_samples);
+	   printf("Number of subbands: %d\n",d_nsub_bands);
+   }
 }
 
 /*
@@ -131,12 +124,10 @@ howto_spectrum_sensing_cf::work (int noutput_items,
 	alpha = calculate_scale_factor(n_zref_segs);
 	if(d_output_far) {
 		false_alarm_rate = calculate_false_alarm_rate(alpha, zref, n_zref_segs);
-		printf("false_alarm_rate: %f\n",false_alarm_rate);
 		out[k] = false_alarm_rate;
 	} else {
 		correct_detection_rate = calculate_primary_user_detection_rate(alpha, zref, n_zref_segs);
-		printf("correct_detection_rate: %f\n",correct_detection_rate);
-	      	out[k] = correct_detection_rate;
+      out[k] = correct_detection_rate;
 	}
   }
 
@@ -201,6 +192,7 @@ float howto_spectrum_sensing_cf::calculate_noise_reference(int* n_zref_segs) {
 			break;
 		}
 	}
+
 	(*n_zref_segs) = I;
 	return energy[I];
 }
@@ -217,40 +209,26 @@ float howto_spectrum_sensing_cf::calculate_scale_factor(int x) {
 float howto_spectrum_sensing_cf::calculate_false_alarm_rate(float alpha, float zref, int I) {
 	
 	float ratio;
-	
+   int false_alarm_counter = 0;
+
 	for(int k=0;k<d_nsub_bands;k++) {
-		d_trials_counter++;
 		ratio = segment[k]/zref;
-		
 		if(ratio > alpha) {
 			if(d_debug_stats) printf("ratio: %f - alpha: %f - segment[%d]: %f - zref: %f - I: %d\n",ratio,alpha,k,segment[k],zref,I);
-			d_false_alarm_counter++;
-		} else {
-			d_correct_rejection_counter++;
+			false_alarm_counter++;
 		}
 	}
-	d_false_alarm_rate = (float)d_false_alarm_counter/d_trials_counter;
-	d_correct_rejection_rate = (float)d_correct_rejection_counter/d_trials_counter;
 	
-	return d_false_alarm_rate;
+	return (float)false_alarm_counter/d_nsub_bands;
 }
 
 float howto_spectrum_sensing_cf::calculate_primary_user_detection_rate(float alpha, float zref, int I) {
 
 	float ratio = 0.0;
 
-	d_trials_counter++;
 	ratio = segment[d_band_location]/zref;
-	if(ratio > alpha) {
-		d_correct_detection_counter++;
-	} else {
-		d_false_rejection_counter++;
-		if(d_debug_stats) printf("ratio: %f - alpha: %f - segment[%d]: %f - zref: %f - I: %d\n",ratio,alpha,d_band_location,segment[d_band_location],zref,I);
-	}
-	d_correct_detection_rate = (float)d_correct_detection_counter/d_trials_counter;
-	d_false_rejection_rate = (float)d_false_rejection_counter/d_trials_counter;
-
-	return d_correct_detection_rate;
+   if(d_debug_stats) printf("ratio: %f - alpha: %f - segment[%d]: %f - zref: %f - I: %d\n",ratio,alpha,d_band_location,segment[d_band_location],zref,I);
+   return (ratio > alpha) ? 1.0 : 0.0;
 }
 
 /* REFERENCES
