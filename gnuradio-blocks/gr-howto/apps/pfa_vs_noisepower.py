@@ -31,6 +31,7 @@ class PfaVsNoisePowerSimu(gr.top_block):
       tcme = 1.9528
       output_pfa = True
       debug_stats = False
+      histogram = False
       primary_user_location = 0
       useless_bw = 200000.0
       src_data = [0+0j]*fft_size*nTrials
@@ -42,7 +43,7 @@ class PfaVsNoisePowerSimu(gr.top_block):
       add = gr.add_vcc()
       s2v = gr.stream_to_vector(gr.sizeof_gr_complex, fft_size)
       fftb = fft.fft_vcc(fft_size, True, (window.blackmanharris(1024)), False, 1)
-      ss = howto.spectrum_sensing_cf(samp_rate,fft_size,samples_per_band,pfd,pfa,tcme,output_pfa,debug_stats,primary_user_location,useless_bw)
+      ss = howto.spectrum_sensing_cf(samp_rate,fft_size,samples_per_band,pfd,pfa,tcme,output_pfa,debug_stats,primary_user_location,useless_bw,histogram)
       self.sink = gr.vector_sink_f()
 
 		# Connections

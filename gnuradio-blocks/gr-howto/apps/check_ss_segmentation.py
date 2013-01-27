@@ -39,29 +39,14 @@ class PfaVsNoisePowerSimu(gr.top_block):
       primary_user_location = 0
 
 		# Blocks
-      rtl2832_source = baz.rtl_source_c(defer_creation=True, output_size=gr.sizeof_gr_complex)
-      rtl2832_source.set_verbose(True)
-      rtl2832_source.set_vid(0x0)
-      rtl2832_source.set_pid(0x0)
-      rtl2832_source.set_tuner_name("")
-      rtl2832_source.set_default_timeout(0)
-      rtl2832_source.set_use_buffer(True)
-      rtl2832_source.set_fir_coefficients(([]))
-      rtl2832_source.set_read_length(0)
-      if rtl2832_source.create() == False: raise Exception("Failed to create RTL2832 Source: rtl2832_source_0")
-      rtl2832_source.set_sample_rate(samp_rate)
-      rtl2832_source.set_frequency(freq)
-      rtl2832_source.set_auto_gain_mode(True)
-      rtl2832_source.set_relative_gain(True)
-      rtl2832_source.set_gain(1)
-
+      sig_source = gr.sig_source_c(samp_rate, gr.GR_COS_WAVE, freq, 1, 0)
       s2v = gr.stream_to_vector(gr.sizeof_gr_complex, fft_size)
       fftb = fft.fft_vcc(fft_size, True, (window.blackmanharris(1024)), False, 1)
       self.ss = howto.spectrum_sensing_cf(samp_rate,fft_size,samples_per_band,pfd,pfa,tcme,output_pfa,debug_stats,primary_user_location,useless_bw,histogram)
       self.sink = gr.vector_sink_f()
 
 		# Connections
-      self.connect(rtl2832_source, s2v, fftb, self.ss, self.sink)
+      self.connect(sig_source, s2v, fftb, self.ss, self.sink)
 
    def getHistogram(self,pos):
       return self.ss.get_histogram(pos)
@@ -99,7 +84,7 @@ def plotHistogram(fg):
 if __name__ == "__main__":
    pfa = 0.0001
    pfd = 0.001
-   freq = 106e6
+   freq = 300000
    useless_bw = 200000.0
    nTrials = 1
    simu_time = nTrials*1.74 # approximately nTrials*1000 samples

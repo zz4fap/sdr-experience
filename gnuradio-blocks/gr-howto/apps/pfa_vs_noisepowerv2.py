@@ -33,6 +33,7 @@ class PfaVsNoisePowerSimu(gr.top_block):
       tcme = 1.9528
       output_pfa = True
       debug_stats = False
+      histogram = False
       primary_user_location = 0
       useless_bw = 200000.0
 
