@@ -4,7 +4,7 @@
   <key>howto_spectrum_sensing_cf</key>
   <category>HOWTO</category>
   <import>import howto</import>
-  <make>howto.spectrum_sensing_cf($sample_rate,$ninput_samples,$samples_per_band,$pfd,$pfa,$tcme,$output_far,$debug_stats,$band_location,$useless_band,$debug_histogram)</make>
+  <make>howto.spectrum_sensing_cf($sample_rate,$ninput_samples,$samples_per_band,$pfd,$pfa,$tcme,$output_far,$debug_stats,$band_location,$useless_band,$debug_histogram,$history)</make>
   <callback>set_sample_rate($sample_rate)</callback>
   <callback>set_ninput_samples($ninput_samples)</callback>
   <callback>set_samples_per_band($samples_per_band)</callback>
@@ -13,6 +13,7 @@
   <callback>set_tcme($tcme)</callback>
   <callback>set_band_location($band_location)</callback>
   <callback>set_useless_band($useless_band)</callback>
+  <callback>set_history($history)</callback>
   <param>
     <name>Sample Rate</name>
     <key>sample_rate</key>
@@ -98,6 +99,12 @@
     <key>useless_band</key>
     <value>200000.0</value>
     <type>real</type>
+  </param>
+  <param>
+    <name>History</name>
+    <key>history</key>
+    <value>3</value>
+    <type>int</type>
   </param>
   <sink>
     <name>in</name>

@@ -36,6 +36,7 @@ class PfaVsNoisePowerSimu(gr.top_block):
       primary_user_location = 0
       mu = 0
       fft_size = 4096
+      history = 3
 
       src_data = self.generateRandomSignalSource(dBm, fft_size, mu)
 
@@ -43,7 +44,7 @@ class PfaVsNoisePowerSimu(gr.top_block):
       src = gr.vector_source_c(src_data)
       s2v = gr.stream_to_vector(gr.sizeof_gr_complex, fft_size)
       fftb = fft.fft_vcc(fft_size, True, (window.blackmanharris(1024)), False, 1)
-      self.ss = howto.spectrum_sensing_cf(samp_rate,fft_size,samples_per_band,pfd,pfa,tcme,output_pfa,debug_stats,primary_user_location,useless_bw,histogram)
+      self.ss = howto.spectrum_sensing_cf(samp_rate,fft_size,samples_per_band,pfd,pfa,tcme,output_pfa,debug_stats,primary_user_location,useless_bw,histogram,history)
       self.sink = gr.vector_sink_f()
 
 		# Connections
@@ -98,7 +99,7 @@ if __name__ == "__main__":
    pfd = 0.001
    useless_bw = 200000.0
    dBm = 0
-   nTrials = 10000
+   nTrials = 1000
    false_alarm_rate = simulate_pfa(dBm, pfa, pfd, useless_bw, nTrials)
    print false_alarm_rate
 

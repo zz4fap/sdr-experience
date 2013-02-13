@@ -51,23 +51,25 @@ typedef boost::shared_ptr<howto_spectrum_sensing_cf> howto_spectrum_sensing_cf_s
  * constructor is private.  howto_make_square_ff is the public
  * interface for creating new instances.
  */
-HOWTO_API howto_spectrum_sensing_cf_sptr howto_make_spectrum_sensing_cf (float sample_rate, int ninput_samples, int samples_per_band, float pfd, float pfa, float tcme, bool output_far, bool debug_stats, int band_location, float useless_band, bool debug_histogram);
+HOWTO_API howto_spectrum_sensing_cf_sptr howto_make_spectrum_sensing_cf (float sample_rate, int ninput_samples, int samples_per_band, float pfd, float pfa, float tcme, bool output_far, bool debug_stats, int band_location, float useless_band, bool debug_histogram, int history);
 
 class HOWTO_API howto_spectrum_sensing_cf : public gr_sync_block
 {
 private:
   // The friend declaration allows howto_make_spectrum_sensing_cf to
   // access the private constructor.
-  friend HOWTO_API howto_spectrum_sensing_cf_sptr howto_make_spectrum_sensing_cf (float sample_rate, int ninput_samples, int samples_per_band, float pfd, float pfa, float tcme, bool output_far, bool debug_stats, int band_location, float useless_band, bool debug_histogram);
+  friend HOWTO_API howto_spectrum_sensing_cf_sptr howto_make_spectrum_sensing_cf (float sample_rate, int ninput_samples, int samples_per_band, float pfd, float pfa, float tcme, bool output_far, bool debug_stats, int band_location, float useless_band, bool debug_histogram, int history);
 
   float d_sample_rate, d_pfd, d_pfa, d_tcme, d_useless_band;
   float *segment, *sorted_segment;
-  int d_ninput_samples, d_samples_per_band, d_band_location, d_useless_segment, d_usefull_samples, d_nsub_bands, *fa_histogram;
+  int d_ninput_samples, d_samples_per_band, d_band_location, d_useless_segment, d_usefull_samples, d_nsub_bands, *fa_histogram, d_history;
   bool d_output_far, d_debug_stats, d_debug_histogram;
-  gr_complex *new_in;
+  gr_complex *new_in, *avg_noise;
 
-  howto_spectrum_sensing_cf (float sample_rate, int ninput_samples, int samples_per_band, float pfd, float pfa, float tcme, bool output_far, bool debug_stats, int band_location, float useless_band, bool debug_histogram);  	// private constructor
+  howto_spectrum_sensing_cf (float sample_rate, int ninput_samples, int samples_per_band, float pfd, float pfa, float tcme, bool output_far, bool debug_stats, int band_location, float useless_band, bool debug_histogram, int history);  	// private constructor
 
+  void average(const gr_complex *in, int vector_number);
+  void segment_averaged_spectrum();
   void segment_spectrum(const gr_complex *in, int vector_number);
   bool sort_energy();
   float calculate_noise_reference(int* n_zref_segs);

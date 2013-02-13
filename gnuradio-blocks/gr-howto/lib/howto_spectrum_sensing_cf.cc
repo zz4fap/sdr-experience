@@ -38,9 +38,9 @@
  * Create a new instance of howto_square_ff and return
  * a boost shared_ptr.  This is effectively the public constructor.
  */
-howto_spectrum_sensing_cf_sptr howto_make_spectrum_sensing_cf(float sample_rate, int ninput_samples, int samples_per_band, float pfd, float pfa, float tcme, bool output_far, bool debug_stats, int band_location, float useless_band, bool debug_histogram)
+howto_spectrum_sensing_cf_sptr howto_make_spectrum_sensing_cf(float sample_rate, int ninput_samples, int samples_per_band, float pfd, float pfa, float tcme, bool output_far, bool debug_stats, int band_location, float useless_band, bool debug_histogram, int history)
 {
-  return gnuradio::get_initial_sptr(new howto_spectrum_sensing_cf (sample_rate, ninput_samples, samples_per_band, pfd, pfa, tcme, output_far, debug_stats, band_location, useless_band, debug_histogram));
+  return gnuradio::get_initial_sptr(new howto_spectrum_sensing_cf (sample_rate, ninput_samples, samples_per_band, pfd, pfa, tcme, output_far, debug_stats, band_location, useless_band, debug_histogram, history));
 }
 
 /*
@@ -60,7 +60,7 @@ static const int MAX_OUT = 1;	// maximum number of output streams
 /*
  * The private constructor
  */
-howto_spectrum_sensing_cf::howto_spectrum_sensing_cf (float sample_rate, int ninput_samples, int samples_per_band, float pfd, float pfa, float tcme, bool output_far, bool debug_stats, int band_location, float useless_band, bool debug_histogram) 
+howto_spectrum_sensing_cf::howto_spectrum_sensing_cf (float sample_rate, int ninput_samples, int samples_per_band, float pfd, float pfa, float tcme, bool output_far, bool debug_stats, int band_location, float useless_band, bool debug_histogram, int history) 
       : gr_sync_block ("spectrum_sensing_cf",
 	   gr_make_io_signature (MIN_IN, MAX_IN, ninput_samples*sizeof (gr_complex)),
 	   gr_make_io_signature (MIN_OUT, MAX_OUT, sizeof (float))),
@@ -74,17 +74,17 @@ howto_spectrum_sensing_cf::howto_spectrum_sensing_cf (float sample_rate, int nin
 	   d_debug_stats(debug_stats),
 	   d_band_location(band_location),
 	   d_useless_band(useless_band),
-      d_debug_histogram(debug_histogram)
+      d_debug_histogram(debug_histogram),
+      d_history(history)
 {	
    float delta_f = d_sample_rate/d_ninput_samples;
 	d_useless_segment = (int)ceil(d_useless_band/delta_f);
 	d_usefull_samples = d_ninput_samples - 6*d_useless_segment;
 	d_nsub_bands = (int)floor(d_usefull_samples/d_samples_per_band);
-	new_in = new gr_complex[d_usefull_samples];
+   avg_noise = new gr_complex[d_ninput_samples];
 	segment = new float[d_nsub_bands];
 	sorted_segment = new float[d_nsub_bands];   
 
-	memset(new_in,0,d_usefull_samples*sizeof(gr_complex));
 	memset(segment,0,d_nsub_bands*sizeof(float));
 	memset(sorted_segment,0,d_nsub_bands*sizeof(float));
 
@@ -100,6 +100,12 @@ howto_spectrum_sensing_cf::howto_spectrum_sensing_cf (float sample_rate, int nin
 	   printf("Usefull segment size: %d\n",d_usefull_samples);
 	   printf("Number of subbands: %d\n",d_nsub_bands);
    }
+
+   // Set history so that we can average over the noise samples.
+   if(d_history>1) {
+      set_history(d_history);
+      memset(avg_noise,0,ninput_samples*sizeof(gr_complex));
+   }
 }
 
 /*
@@ -109,7 +115,7 @@ howto_spectrum_sensing_cf::~howto_spectrum_sensing_cf ()
 {
 	delete[] segment;
 	delete[] sorted_segment;
-	delete[] new_in;
+   delete[] avg_noise;
 }
 
 int
@@ -124,7 +130,12 @@ howto_spectrum_sensing_cf::work (int noutput_items,
   int n_zref_segs = 0;
 
   for(int k=0;k<noutput_items;k++) {
-	segment_spectrum(in, k);
+   if(d_history>1) {
+      average(in, k);
+	   segment_averaged_spectrum();
+   } else {
+      segment_spectrum(in, k);
+   }
 	sort_energy();
 	zref = calculate_noise_reference(&n_zref_segs);
 	alpha = calculate_scale_factor(n_zref_segs);
@@ -139,6 +150,41 @@ howto_spectrum_sensing_cf::work (int noutput_items,
 
   // Tell runtime system how many output items we produced.
   return noutput_items;
+}
+
+void howto_spectrum_sensing_cf::average(const gr_complex *in, int vector_number) {
+   const gr_complex *my_in = in + vector_number*d_ninput_samples;
+
+   for(int i=0; i<d_ninput_samples; i++) {
+      avg_noise[i] = 0.0;
+      for(int k=0; k<d_history; k++) {
+         avg_noise[i] = avg_noise[i] + my_in[i + k*d_ninput_samples];
+      }
+      avg_noise[i] = (avg_noise[i])/(float)d_history;
+   }
+}
+
+/* Segment the averaged spectrum into blocks with the sum of the energies.*/
+void howto_spectrum_sensing_cf::segment_averaged_spectrum() {
+	int pos = 0;
+
+	for(int i=0;i<d_nsub_bands;i++) {
+		segment[i] = 0.0;
+		for(int k=0;k<d_samples_per_band;k++) {
+			if((i*d_samples_per_band + k + d_useless_segment) <= (d_ninput_samples/2 - 2*d_useless_segment)) {
+				pos = d_useless_segment + i*d_samples_per_band + k;
+				//printf("i: %d - k: %d - pos1: %d\n",i,k,(d_useless_segment + (i*d_samples_per_band) + k));
+				segment[i] = segment[i] + pow(abs(avg_noise[pos]),2);
+			} else if((i*d_samples_per_band + k + 5*d_useless_segment) > (d_ninput_samples/2 + 2*d_useless_segment) && (i*d_samples_per_band + k + 5*d_useless_segment) < (d_ninput_samples - d_useless_segment)) {
+				pos = i*d_samples_per_band + k + 5*d_useless_segment;
+				//printf("i: %d - k: %d - pos2: %d\n",i,k,(i*d_samples_per_band + k + 5*d_useless_segment));
+				segment[i] = segment[i] + pow(abs(avg_noise[pos]),2);
+			} else {
+				printf("Error!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+			}
+		}
+		sorted_segment[i] = segment[i];
+	}
 }
 
 /* Segment the spectrum into blocks with the sum of the energies.*/
@@ -232,11 +278,18 @@ float howto_spectrum_sensing_cf::calculate_false_alarm_rate(float alpha, float z
 
 float howto_spectrum_sensing_cf::calculate_primary_user_detection_rate(float alpha, float zref, int I) {
 
-	float ratio = 0.0;
+	float ratio = 0.0, numberOfCorrectDetections = 0.0;
+   int nSegsToCheck = 6;
 
-	ratio = segment[d_band_location]/zref;
-   if(d_debug_stats) printf("ratio: %f - alpha: %f - segment[%d]: %f - zref: %f - I: %d\n",ratio,alpha,d_band_location,segment[d_band_location],zref,I);
-   return (ratio > alpha) ? 1.0 : 0.0;
+   for(int i=0;i<=nSegsToCheck;i++) {
+      ratio = segment[d_band_location-(nSegsToCheck/2)+i]/zref;
+      if(ratio > alpha) {
+         numberOfCorrectDetections++;
+      }
+      if(d_debug_stats) printf("ratio: %f - alpha: %f - segment[%d]: %f - zref: %f - I: %d\n",ratio,alpha,i,segment[i],zref,I);
+   }
+
+   return numberOfCorrectDetections/(nSegsToCheck+1);
 }
 
 /* REFERENCES

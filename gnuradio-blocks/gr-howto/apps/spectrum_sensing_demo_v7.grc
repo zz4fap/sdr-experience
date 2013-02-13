@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='ASCII'?>
 <flow_graph>
-  <timestamp>Sun Jan 20 12:00:38 2013</timestamp>
+  <timestamp>Wed Feb 13 14:58:00 2013</timestamp>
   <block>
     <key>options</key>
     <param>
@@ -373,73 +373,6 @@
     </param>
   </block>
   <block>
-    <key>howto_spectrum_sensing_cf</key>
-    <param>
-      <key>id</key>
-      <value>howto_spectrum_sensing_cf_0</value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>sample_rate</key>
-      <value>samp_rate</value>
-    </param>
-    <param>
-      <key>ninput_samples</key>
-      <value>4096</value>
-    </param>
-    <param>
-      <key>samples_per_band</key>
-      <value>16</value>
-    </param>
-    <param>
-      <key>pfd</key>
-      <value>0.001</value>
-    </param>
-    <param>
-      <key>pfa</key>
-      <value>0.0001</value>
-    </param>
-    <param>
-      <key>tcme</key>
-      <value>1.9528</value>
-    </param>
-    <param>
-      <key>debug_far</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>debug_cdr</key>
-      <value>False</value>
-    </param>
-    <param>
-      <key>band_location</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>debug_stats</key>
-      <value>False</value>
-    </param>
-    <param>
-      <key>noutput_samples</key>
-      <value>127</value>
-    </param>
-    <param>
-      <key>useless_bandwidth</key>
-      <value>350000</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(767, 291)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-  </block>
-  <block>
     <key>rtl2832_source</key>
     <param>
       <key>id</key>
@@ -532,6 +465,73 @@
     <param>
       <key>_coordinate</key>
       <value>(-1, 290)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+  </block>
+  <block>
+    <key>howto_spectrum_sensing_cf</key>
+    <param>
+      <key>id</key>
+      <value>howto_spectrum_sensing_cf_0</value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>sample_rate</key>
+      <value>samp_rate</value>
+    </param>
+    <param>
+      <key>ninput_samples</key>
+      <value>4096</value>
+    </param>
+    <param>
+      <key>samples_per_band</key>
+      <value>16</value>
+    </param>
+    <param>
+      <key>pfd</key>
+      <value>0.001</value>
+    </param>
+    <param>
+      <key>pfa</key>
+      <value>0.0001</value>
+    </param>
+    <param>
+      <key>tcme</key>
+      <value>1.9528</value>
+    </param>
+    <param>
+      <key>output_far</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>band_location</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>debug_stats</key>
+      <value>False</value>
+    </param>
+    <param>
+      <key>debug_histogram</key>
+      <value>False</value>
+    </param>
+    <param>
+      <key>useless_band</key>
+      <value>200000.0</value>
+    </param>
+    <param>
+      <key>history</key>
+      <value>8</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(767, 291)</value>
     </param>
     <param>
       <key>_rotation</key>
