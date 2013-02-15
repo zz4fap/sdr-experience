@@ -104,7 +104,7 @@ if __name__ == "__main__":
    freq = 77e6 # frequency without any channel in Campinas.
    useless_bw = 350000.0
    history = 5
-   nTrials = 1
+   nTrials = 6
    simu_time = nTrials*1.74 # approximately nTrials*1000 samples
    fa_rate = simulate_pfa(pfa, pfd, freq, useless_bw, simu_time, history)
    print fa_rate

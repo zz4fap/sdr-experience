@@ -38,9 +38,9 @@
  * Create a new instance of howto_square_ff and return
  * a boost shared_ptr.  This is effectively the public constructor.
  */
-howto_spectrum_sensing_cf_sptr howto_make_spectrum_sensing_cf(float sample_rate, int ninput_samples, int samples_per_band, float pfd, float pfa, float tcme, bool output_far, bool debug_stats, int band_location, float useless_band, bool debug_histogram, int history)
+howto_spectrum_sensing_cf_sptr howto_make_spectrum_sensing_cf(float sample_rate, int ninput_samples, int samples_per_band, float pfd, float pfa, float tcme, bool output_far, bool debug_stats, int band_location, float useless_band, bool debug_histogram, int decimation)
 {
-  return gnuradio::get_initial_sptr(new howto_spectrum_sensing_cf (sample_rate, ninput_samples, samples_per_band, pfd, pfa, tcme, output_far, debug_stats, band_location, useless_band, debug_histogram, history));
+  return gnuradio::get_initial_sptr(new howto_spectrum_sensing_cf (sample_rate, ninput_samples, samples_per_band, pfd, pfa, tcme, output_far, debug_stats, band_location, useless_band, debug_histogram, decimation));
 }
 
 /*
@@ -60,10 +60,11 @@ static const int MAX_OUT = 1;	// maximum number of output streams
 /*
  * The private constructor
  */
-howto_spectrum_sensing_cf::howto_spectrum_sensing_cf (float sample_rate, int ninput_samples, int samples_per_band, float pfd, float pfa, float tcme, bool output_far, bool debug_stats, int band_location, float useless_band, bool debug_histogram, int history) 
-      : gr_sync_block ("spectrum_sensing_cf",
+howto_spectrum_sensing_cf::howto_spectrum_sensing_cf (float sample_rate, int ninput_samples, int samples_per_band, float pfd, float pfa, float tcme, bool output_far, bool debug_stats, int band_location, float useless_band, bool debug_histogram, int decimation) 
+      : gr_sync_decimator ("spectrum_sensing_cf",
 	   gr_make_io_signature (MIN_IN, MAX_IN, ninput_samples*sizeof (gr_complex)),
-	   gr_make_io_signature (MIN_OUT, MAX_OUT, sizeof (float))),
+	   gr_make_io_signature (MIN_OUT, MAX_OUT, sizeof (float)),
+      decimation),
 	   d_sample_rate(sample_rate),
 	   d_ninput_samples(ninput_samples),
  	   d_samples_per_band(samples_per_band),
@@ -75,7 +76,8 @@ howto_spectrum_sensing_cf::howto_spectrum_sensing_cf (float sample_rate, int nin
 	   d_band_location(band_location),
 	   d_useless_band(useless_band),
       d_debug_histogram(debug_histogram),
-      d_history(history)
+      d_decimation(decimation),
+      d_average(4) 
 {	
    float delta_f = d_sample_rate/d_ninput_samples;
 	d_useless_segment = (int)ceil(d_useless_band/delta_f);
@@ -101,11 +103,7 @@ howto_spectrum_sensing_cf::howto_spectrum_sensing_cf (float sample_rate, int nin
 	   printf("Number of subbands: %d\n",d_nsub_bands);
    }
 
-   // Set history so that we can average over the noise samples.
-   if(d_history>1) {
-      set_history(d_history);
-      memset(avg_noise,0,ninput_samples*sizeof(gr_complex));
-   }
+   memset(avg_noise,0,ninput_samples*sizeof(gr_complex));
 }
 
 /*
@@ -123,44 +121,47 @@ howto_spectrum_sensing_cf::work (int noutput_items,
 			       gr_vector_const_void_star &input_items,
 			       gr_vector_void_star &output_items)
 {
-  const gr_complex *in = (const gr_complex *) input_items[0];
-  float *out = (float *) output_items[0];
+   const gr_complex *in = (const gr_complex *) input_items[0];
+   float *out = (float *) output_items[0];
 	
-  float zref, alpha, false_alarm_rate, correct_detection_rate;
-  int n_zref_segs = 0;
+   float zref, alpha, false_alarm_rate, correct_detection_rate;
+   int n_zref_segs = 0, nOfTimesToCheck = d_decimation/d_average;
 
-  for(int k=0;k<noutput_items;k++) {
-   if(d_history>1) {
-      average(in, k);
-	   segment_averaged_spectrum();
-   } else {
-      segment_spectrum(in, k);
+   for(int k = 0; k < noutput_items; k++) {
+      false_alarm_rate = 0.0;
+      correct_detection_rate = 0.0;
+      for(int j = 0; j < nOfTimesToCheck; j++) {
+         average(in, k, j);
+         segment_averaged_spectrum();
+	      sort_energy();
+	      zref = calculate_noise_reference(&n_zref_segs);
+	      alpha = calculate_scale_factor(n_zref_segs);
+	      if(d_output_far) {
+		      false_alarm_rate += calculate_false_alarm_rate(alpha, zref, n_zref_segs);
+	      } else {
+            correct_detection_rate += calculate_primary_user_detection_rate(alpha, zref, n_zref_segs);
+	      }
+      }
+      if(d_output_far) {
+         out[k] = false_alarm_rate/nOfTimesToCheck;
+      } else {
+         out[k] = correct_detection_rate/nOfTimesToCheck;
+      }
    }
-	sort_energy();
-	zref = calculate_noise_reference(&n_zref_segs);
-	alpha = calculate_scale_factor(n_zref_segs);
-	if(d_output_far) {
-		false_alarm_rate = calculate_false_alarm_rate(alpha, zref, n_zref_segs);
-		out[k] = false_alarm_rate;
-	} else {
-		correct_detection_rate = calculate_primary_user_detection_rate(alpha, zref, n_zref_segs);
-      out[k] = correct_detection_rate;
-	}
-  }
 
   // Tell runtime system how many output items we produced.
   return noutput_items;
 }
 
-void howto_spectrum_sensing_cf::average(const gr_complex *in, int vector_number) {
-   const gr_complex *my_in = in + vector_number*d_ninput_samples;
+void howto_spectrum_sensing_cf::average(const gr_complex *in, int output_item, int segment_group) {
+   const gr_complex *my_in = in + output_item*d_decimation*d_ninput_samples + segment_group*d_average*d_ninput_samples;
 
-   for(int i=0; i<d_ninput_samples; i++) {
+   for(int i = 0; i < d_ninput_samples; i++) {
       avg_noise[i] = 0.0;
-      for(int k=0; k<d_history; k++) {
+      for(int k = 0; k < d_average; k++) {
          avg_noise[i] = avg_noise[i] + my_in[i + k*d_ninput_samples];
       }
-      avg_noise[i] = (avg_noise[i])/(float)d_history;
+      avg_noise[i] = (avg_noise[i])/(float)d_average;
    }
 }
 
