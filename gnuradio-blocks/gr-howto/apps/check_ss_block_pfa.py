@@ -23,7 +23,7 @@ import matplotlib.pyplot as plt
 
 class PfaVsNoisePowerSimu(gr.top_block):
    " This contains the simulation flow graph "
-   def __init__(self, dBm, pfa, pfd, useless_bw):
+   def __init__(self, dBm, pfa, pfd, useless_bw, plot_histogram):
       gr.top_block.__init__(self)
 
       # Constants
@@ -32,19 +32,20 @@ class PfaVsNoisePowerSimu(gr.top_block):
       tcme = 1.9528
       output_pfa = True
       debug_stats = False
-      histogram = True
+      self.histogram = plot_histogram
       primary_user_location = 5
       mu = 0
       fft_size = 4096
-      decimation = 12
+      nframes_to_check = 1
+      nframes_to_average = 1
 
-      src_data = self.generateRandomSignalSource(dBm, fft_size, mu, decimation)
+      src_data = self.generateRandomSignalSource(dBm, fft_size, mu, nframes_to_check*nframes_to_average)
 
 		# Blocks
       src = gr.vector_source_c(src_data)
       s2v = gr.stream_to_vector(gr.sizeof_gr_complex, fft_size)
       fftb = fft.fft_vcc(fft_size, True, (window.blackmanharris(1024)), False, 1)
-      self.ss = howto.spectrum_sensing_cf(samp_rate,fft_size,samples_per_band,pfd,pfa,tcme,output_pfa,debug_stats,primary_user_location,useless_bw,histogram,decimation)
+      self.ss = howto.spectrum_sensing_cf(samp_rate,fft_size,samples_per_band,pfd,pfa,tcme,output_pfa,debug_stats,primary_user_location,useless_bw,self.histogram,nframes_to_check,nframes_to_average)
       self.sink = gr.vector_sink_f()
 
 		# Connections
@@ -71,25 +72,29 @@ class PfaVsNoisePowerSimu(gr.top_block):
    def get_debug_histogram(self):
       return self.ss.debug_histogram()
 
-def simulate_pfa(dBm, pfa, pfd, useless_bw, nTrials):
+   def plot_histogram(self):
+      return self.histogram
+
+def simulate_pfa(dBm, pfa, pfd, useless_bw, plot_histogram, nTrials):
    """ All the work's done here: create flow graph, run and read out Pfa """
    false_alarm_rate = 0.0
-   nSubBands = 127
-   histograma = [0]*nSubBands
+   maxNumberOfSubBands = 256
+   histograma = [0]*maxNumberOfSubBands
+   nSubBands = 0
    print "Noise Power = %f dBm" % dBm
    for j in range(1,nTrials+1):
-      fg = PfaVsNoisePowerSimu(dBm, pfa, pfd, useless_bw)
+      fg = PfaVsNoisePowerSimu(dBm, pfa, pfd, useless_bw, plot_histogram)
       fg.run()
       false_alarm_rate = false_alarm_rate + fg.sink.data()[0]
-      if fg.get_debug_histogram() == True:
+      if plot_histogram == True:
+         nSubBands = fg.getNumberOfSubBands()
          for i in range(0,nSubBands):
             histograma[i] = fg.getHistogram(i) + histograma[i]
-   if fg.get_debug_histogram() == True: plotHistogram(histograma, nSubBands)
+   if plot_histogram == True: plotHistogram(histograma, nSubBands)
    return false_alarm_rate/nTrials
 
 def plotHistogram(histograma, nSubBands):
-   #plt.plot(range(0,nSubBands), histogram, 'ro')
-   plt.plot(range(0,nSubBands), histograma)
+   plt.stem(range(0,nSubBands), histograma[0:nSubBands])
    plt.ylabel('Number of FA in a given sub-band')
    plt.xlabel('sub-band')
    plt.show()
@@ -99,8 +104,9 @@ if __name__ == "__main__":
    pfd = 0.001
    useless_bw = 200000.0
    dBm = 0
-   nTrials = 100
-   false_alarm_rate = simulate_pfa(dBm, pfa, pfd, useless_bw, nTrials)
+   nTrials = 200
+   plot_histogram = True
+   false_alarm_rate = simulate_pfa(dBm, pfa, pfd, useless_bw, plot_histogram, nTrials)
    print false_alarm_rate
 
 
