@@ -38,6 +38,7 @@ class PfaVsNoisePowerSimu(gr.top_block):
       debug_stats = False
       histogram = True
       primary_user_location = 5
+      downconverter = 1
 
 		# Blocks
       rtlsdr_source = osmosdr.source_c( args="nchan=" + str(1) + " " + "" )
@@ -50,7 +51,7 @@ class PfaVsNoisePowerSimu(gr.top_block):
 
       s2v = gr.stream_to_vector(gr.sizeof_gr_complex, fft_size)
       fftb = fft.fft_vcc(fft_size, True, (window.blackmanharris(1024)), False, 1)
-      self.ss = howto.spectrum_sensing_cf(samp_rate,fft_size,samples_per_band,pfd,pfa,tcme,output_pfa,debug_stats,primary_user_location,useless_bw,histogram,nframes_to_check,nframes_to_average)
+      self.ss = howto.spectrum_sensing_cf(samp_rate,fft_size,samples_per_band,pfd,pfa,tcme,output_pfa,debug_stats,primary_user_location,useless_bw,histogram,nframes_to_check,nframes_to_average,downconverter)
       self.sink = gr.vector_sink_f()
 
 		# Connections
@@ -92,10 +93,10 @@ def plotHistogram(fg):
 if __name__ == "__main__":
    pfa = 0.0001
    pfd = 0.001
-   freq = 27e6
-   #freq = 92.13e6
+   #freq = 31e6
+   freq = 107.9e6
    #useless_bw = 350000.0
-   useless_bw = 0.0
+   useless_bw = 400000.0
    nframes_to_check = 1
    nframes_to_average = 1
    nTrials = 3

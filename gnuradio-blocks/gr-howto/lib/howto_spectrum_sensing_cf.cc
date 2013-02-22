@@ -38,9 +38,9 @@
  * Create a new instance of howto_square_ff and return
  * a boost shared_ptr.  This is effectively the public constructor.
  */
-howto_spectrum_sensing_cf_sptr howto_make_spectrum_sensing_cf(float sample_rate, int ninput_samples, int samples_per_band, float pfd, float pfa, float tcme, bool output_far, bool debug_stats, int band_location, float useless_band, bool debug_histogram, int nframes_to_check, int nframes_to_average)
+howto_spectrum_sensing_cf_sptr howto_make_spectrum_sensing_cf(float sample_rate, int ninput_samples, int samples_per_band, float pfd, float pfa, float tcme, bool output_far, bool debug_stats, int band_location, float useless_band, bool debug_histogram, int nframes_to_check, int nframes_to_average, int downconverter)
 {
-   return gnuradio::get_initial_sptr(new howto_spectrum_sensing_cf (sample_rate, ninput_samples, samples_per_band, pfd, pfa, tcme, output_far, debug_stats, band_location, useless_band, debug_histogram, nframes_to_check, nframes_to_average));
+   return gnuradio::get_initial_sptr(new howto_spectrum_sensing_cf (sample_rate, ninput_samples, samples_per_band, pfd, pfa, tcme, output_far, debug_stats, band_location, useless_band, debug_histogram, nframes_to_check, nframes_to_average, downconverter));
 }
 
 /*
@@ -60,7 +60,7 @@ static const int MAX_OUT = 1;	// maximum number of output streams
 /*
  * The private constructor
  */
-howto_spectrum_sensing_cf::howto_spectrum_sensing_cf (float sample_rate, int ninput_samples, int samples_per_band, float pfd, float pfa, float tcme, bool output_far, bool debug_stats, int band_location, float useless_band, bool debug_histogram, int nframes_to_check, int nframes_to_average) 
+howto_spectrum_sensing_cf::howto_spectrum_sensing_cf (float sample_rate, int ninput_samples, int samples_per_band, float pfd, float pfa, float tcme, bool output_far, bool debug_stats, int band_location, float useless_band, bool debug_histogram, int nframes_to_check, int nframes_to_average, int downconverter) 
       : gr_sync_decimator ("spectrum_sensing_cf",
 	   gr_make_io_signature (MIN_IN, MAX_IN, ninput_samples*sizeof (gr_complex)),
 	   gr_make_io_signature (MIN_OUT, MAX_OUT, sizeof (float)),
@@ -77,11 +77,12 @@ howto_spectrum_sensing_cf::howto_spectrum_sensing_cf (float sample_rate, int nin
 	   d_useless_band(useless_band),
       d_debug_histogram(debug_histogram),
       d_nconsecutive_frames_to_check(nframes_to_check), // Number of consecutive frames to be checked in order to make a assumption that the channel is occupied.
-      d_nframes_to_average(nframes_to_average) // Number of frames used for averaging.
+      d_nframes_to_average(nframes_to_average), // Number of frames used for averaging.
+      d_downconverter(downconverter)
 {	
    float delta_f = d_sample_rate/d_ninput_samples;
 	d_useless_segment = (int)ceil(d_useless_band/delta_f);
-	d_usefull_samples = d_ninput_samples - 6*d_useless_segment;
+	d_usefull_samples = select_avg_and_seg_method(downconverter, d_useless_segment);
 	d_nsub_bands = (int)floor(d_usefull_samples/d_samples_per_band);
 	segment = new float[d_nsub_bands];
 	sorted_segment = new float[d_nsub_bands];   
@@ -114,6 +115,27 @@ howto_spectrum_sensing_cf::~howto_spectrum_sensing_cf ()
 	delete[] sorted_segment;
 }
 
+int howto_spectrum_sensing_cf::select_avg_and_seg_method(int downconverter, int useless_segment) {
+
+   int usefull_samples = 0;   
+
+   switch(downconverter) {
+      case 1:
+         avg_and_seg_spectrum = &howto_spectrum_sensing_cf::average_and_segment_spectrum_r820t;
+         usefull_samples = d_ninput_samples - 2*useless_segment;
+         break;
+      case 2:
+         avg_and_seg_spectrum = &howto_spectrum_sensing_cf::average_and_segment_spectrum_e4k;
+         usefull_samples = d_ninput_samples - 6*useless_segment;
+         break;
+      default:
+         avg_and_seg_spectrum = &howto_spectrum_sensing_cf::average_and_segment_spectrum_r820t;
+         usefull_samples = d_ninput_samples - 2*useless_segment;
+         break;
+   }
+   return usefull_samples;
+}
+
 int
 howto_spectrum_sensing_cf::work (int noutput_items,
 			       gr_vector_const_void_star &input_items,
@@ -129,7 +151,7 @@ howto_spectrum_sensing_cf::work (int noutput_items,
       false_alarm_rate = 0.0;
       correct_detection_rate = 0.0;
       for(int j = 0; j < d_nconsecutive_frames_to_check; j++) {
-         average_and_segment_spectrum(in, k, j);
+         (*this.*avg_and_seg_spectrum)(in, k, j);
 	      sort_energy();
 	      zref = calculate_noise_reference(&n_zref_segs);
 	      alpha = calculate_scale_factor(n_zref_segs);
@@ -150,8 +172,47 @@ howto_spectrum_sensing_cf::work (int noutput_items,
   return noutput_items;
 }
 
-/* Segment the spectrum into blocks with the sum of the energies.*/
-void howto_spectrum_sensing_cf::average_and_segment_spectrum(const gr_complex *in, int output_item, int frame_group) {
+/* Segment the spectrum into blocks with the sum of the energies taking into account the response of the R820T downconverter chip*/
+void howto_spectrum_sensing_cf::average_and_segment_spectrum_r820t(const gr_complex *in, int output_item, int frame_group) {
+	int pos = 0, limit1, limit2;
+   gr_complex avg_value;
+   const gr_complex *my_in = in + output_item*d_decimation*d_ninput_samples + frame_group*d_nframes_to_average*d_ninput_samples;
+
+   limit1 = (d_ninput_samples/2 - d_useless_segment);
+   limit2 = (d_ninput_samples/2 + d_useless_segment);
+
+	for(int i=0;i<d_nsub_bands;i++) {
+		segment[i] = 0.0;
+		for(int k=0;k<d_samples_per_band;k++) {
+         pos = i*d_samples_per_band + k; 
+			if(pos <= limit1) {
+            avg_value = gr_complex(0.0,0.0);
+            for(int v = 0; v < d_nframes_to_average; v++) {
+               avg_value = avg_value + my_in[pos + v*d_ninput_samples];
+            }
+            avg_value = (avg_value)/(float)d_nframes_to_average;
+				segment[i] = segment[i] + pow(abs(avg_value),2);
+			} else {
+            pos = pos + 2*d_useless_segment; 
+            if(pos > limit2) {
+               avg_value = gr_complex(0.0,0.0);
+               for(int v = 0; v < d_nframes_to_average; v++) {
+                  avg_value = avg_value + my_in[pos + v*d_ninput_samples];
+               }
+               avg_value = (avg_value)/(float)d_nframes_to_average;
+				   segment[i] = segment[i] + pow(abs(avg_value),2);
+			   } else {
+				   printf("Error!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+            }
+			}
+		}
+		sorted_segment[i] = segment[i];
+	}
+}
+
+
+/* Segment the spectrum into blocks with the sum of the energies taking into account the response of the E4000 downconverter chip.*/
+void howto_spectrum_sensing_cf::average_and_segment_spectrum_e4k(const gr_complex *in, int output_item, int frame_group) {
 	int pos = 0, limit1, limit2, limit3;
    gr_complex avg_value;
    const gr_complex *my_in = in + output_item*d_decimation*d_ninput_samples + frame_group*d_nframes_to_average*d_ninput_samples;
