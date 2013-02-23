@@ -38,6 +38,7 @@ class PfaVsNoisePowerSimu(gr.top_block):
       fft_size = 4096
       nframes_to_check = 1
       nframes_to_average = 1
+      downconverter = 1
 
       src_data = self.generateRandomSignalSource(dBm, fft_size, mu, nframes_to_check*nframes_to_average)
 
@@ -45,7 +46,7 @@ class PfaVsNoisePowerSimu(gr.top_block):
       src = gr.vector_source_c(src_data)
       s2v = gr.stream_to_vector(gr.sizeof_gr_complex, fft_size)
       fftb = fft.fft_vcc(fft_size, True, (window.blackmanharris(1024)), False, 1)
-      self.ss = howto.spectrum_sensing_cf(samp_rate,fft_size,samples_per_band,pfd,pfa,tcme,output_pfa,debug_stats,primary_user_location,useless_bw,self.histogram,nframes_to_check,nframes_to_average)
+      self.ss = howto.spectrum_sensing_cf(samp_rate,fft_size,samples_per_band,pfd,pfa,tcme,output_pfa,debug_stats,primary_user_location,useless_bw,self.histogram,nframes_to_check,nframes_to_average,downconverter)
       self.sink = gr.vector_sink_f()
 
 		# Connections
@@ -102,7 +103,7 @@ def plotHistogram(histograma, nSubBands):
 if __name__ == "__main__":
    pfa = 0.0001
    pfd = 0.001
-   useless_bw = 200000.0
+   useless_bw = 400000.0
    dBm = 0
    nTrials = 200
    plot_histogram = True

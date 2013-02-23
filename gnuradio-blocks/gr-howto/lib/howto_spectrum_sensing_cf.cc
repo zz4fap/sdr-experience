@@ -184,8 +184,9 @@ void howto_spectrum_sensing_cf::average_and_segment_spectrum_r820t(const gr_comp
 	for(int i=0;i<d_nsub_bands;i++) {
 		segment[i] = 0.0;
 		for(int k=0;k<d_samples_per_band;k++) {
-         pos = i*d_samples_per_band + k; 
-			if(pos <= limit1) {
+         pos = i*d_samples_per_band + k;
+			if(pos < limit1) {
+            //printf("i: %d - k: %d - pos1: %d\n",i,k,pos);
             avg_value = gr_complex(0.0,0.0);
             for(int v = 0; v < d_nframes_to_average; v++) {
                avg_value = avg_value + my_in[pos + v*d_ninput_samples];
@@ -193,8 +194,9 @@ void howto_spectrum_sensing_cf::average_and_segment_spectrum_r820t(const gr_comp
             avg_value = (avg_value)/(float)d_nframes_to_average;
 				segment[i] = segment[i] + pow(abs(avg_value),2);
 			} else {
-            pos = pos + 2*d_useless_segment; 
-            if(pos > limit2) {
+            pos = pos + 2*d_useless_segment;
+            if(pos >= limit2) {
+               //printf("i: %d - k: %d - pos2: %d\n",i,k,pos);
                avg_value = gr_complex(0.0,0.0);
                for(int v = 0; v < d_nframes_to_average; v++) {
                   avg_value = avg_value + my_in[pos + v*d_ninput_samples];
@@ -209,7 +211,6 @@ void howto_spectrum_sensing_cf::average_and_segment_spectrum_r820t(const gr_comp
 		sorted_segment[i] = segment[i];
 	}
 }
-
 
 /* Segment the spectrum into blocks with the sum of the energies taking into account the response of the E4000 downconverter chip.*/
 void howto_spectrum_sensing_cf::average_and_segment_spectrum_e4k(const gr_complex *in, int output_item, int frame_group) {
