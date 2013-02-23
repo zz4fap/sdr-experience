@@ -4,7 +4,7 @@
   <key>howto_spectrum_sensing_cf</key>
   <category>HOWTO</category>
   <import>import howto</import>
-  <make>howto.spectrum_sensing_cf($sample_rate,$ninput_samples,$samples_per_band,$pfd,$pfa,$tcme,$output_far,$debug_stats,$band_location,$useless_band,$debug_histogram,$nframes_to_check,$nframes_to_average,$downconverter)</make>
+  <make>howto.spectrum_sensing_cf($sample_rate,$ninput_samples,$samples_per_band,$pfd,$pfa,$tcme,$output_far,$debug_stats,$band_location,$useless_band,$debug_histogram,$nframes_to_check,$nframes_to_average,$downconverter,$nsegs_to_check)</make>
   <callback>set_sample_rate($sample_rate)</callback>
   <callback>set_ninput_samples($ninput_samples)</callback>
   <callback>set_samples_per_band($samples_per_band)</callback>
@@ -66,6 +66,12 @@
     <name>Band Location of the Primary User</name>
     <key>band_location</key>
     <value>0</value>
+    <type>int</type>
+  </param>
+  <param>
+    <name>Number of segs to check around the location of primary user</name>
+    <key>nsegs_to_check</key>
+    <value>6</value>
     <type>int</type>
   </param>
   <param>

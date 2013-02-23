@@ -34,10 +34,11 @@ class PfaVsNoisePowerSimu(gr.top_block):
       fft_size = 4096
       samples_per_band = 16
       tcme = 1.9528
-      output_pfa = True
+      output_pfa = False
       debug_stats = False
-      histogram = True
-      primary_user_location = 5
+      histogram = False
+      primary_user_location = 42
+      nsegs_to_check = 6
       downconverter = 1
 
 		# Blocks
@@ -51,7 +52,7 @@ class PfaVsNoisePowerSimu(gr.top_block):
 
       s2v = gr.stream_to_vector(gr.sizeof_gr_complex, fft_size)
       fftb = fft.fft_vcc(fft_size, True, (window.blackmanharris(1024)), False, 1)
-      self.ss = howto.spectrum_sensing_cf(samp_rate,fft_size,samples_per_band,pfd,pfa,tcme,output_pfa,debug_stats,primary_user_location,useless_bw,histogram,nframes_to_check,nframes_to_average,downconverter)
+      self.ss = howto.spectrum_sensing_cf(samp_rate,fft_size,samples_per_band,pfd,pfa,tcme,output_pfa,debug_stats,primary_user_location,useless_bw,histogram,nframes_to_check,nframes_to_average,downconverter,nsegs_to_check)
       self.sink = gr.vector_sink_f()
 
 		# Connections
@@ -94,12 +95,12 @@ if __name__ == "__main__":
    pfa = 0.0001
    pfd = 0.001
    #freq = 31e6
-   freq = 107.9e6
+   freq = 94.9e6
    #useless_bw = 350000.0
    useless_bw = 400000.0
-   nframes_to_check = 1
-   nframes_to_average = 1
-   nTrials = 3
+   nframes_to_check = 2
+   nframes_to_average = 6
+   nTrials = 6
    simu_time = nTrials*1.74 # approximately nTrials*1000 samples
    fa_rate = simulate_pfa(pfa, pfd, freq, useless_bw, simu_time, nframes_to_check, nframes_to_average)
    print fa_rate

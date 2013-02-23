@@ -38,9 +38,9 @@
  * Create a new instance of howto_square_ff and return
  * a boost shared_ptr.  This is effectively the public constructor.
  */
-howto_spectrum_sensing_cf_sptr howto_make_spectrum_sensing_cf(float sample_rate, int ninput_samples, int samples_per_band, float pfd, float pfa, float tcme, bool output_far, bool debug_stats, int band_location, float useless_band, bool debug_histogram, int nframes_to_check, int nframes_to_average, int downconverter)
+howto_spectrum_sensing_cf_sptr howto_make_spectrum_sensing_cf(float sample_rate, int ninput_samples, int samples_per_band, float pfd, float pfa, float tcme, bool output_far, bool debug_stats, int band_location, float useless_band, bool debug_histogram, int nframes_to_check, int nframes_to_average, int downconverter, int nsegs_to_check)
 {
-   return gnuradio::get_initial_sptr(new howto_spectrum_sensing_cf (sample_rate, ninput_samples, samples_per_band, pfd, pfa, tcme, output_far, debug_stats, band_location, useless_band, debug_histogram, nframes_to_check, nframes_to_average, downconverter));
+   return gnuradio::get_initial_sptr(new howto_spectrum_sensing_cf (sample_rate, ninput_samples, samples_per_band, pfd, pfa, tcme, output_far, debug_stats, band_location, useless_band, debug_histogram, nframes_to_check, nframes_to_average, downconverter, nsegs_to_check));
 }
 
 /*
@@ -60,7 +60,7 @@ static const int MAX_OUT = 1;	// maximum number of output streams
 /*
  * The private constructor
  */
-howto_spectrum_sensing_cf::howto_spectrum_sensing_cf (float sample_rate, int ninput_samples, int samples_per_band, float pfd, float pfa, float tcme, bool output_far, bool debug_stats, int band_location, float useless_band, bool debug_histogram, int nframes_to_check, int nframes_to_average, int downconverter) 
+howto_spectrum_sensing_cf::howto_spectrum_sensing_cf (float sample_rate, int ninput_samples, int samples_per_band, float pfd, float pfa, float tcme, bool output_far, bool debug_stats, int band_location, float useless_band, bool debug_histogram, int nframes_to_check, int nframes_to_average, int downconverter, int nsegs_to_check) 
       : gr_sync_decimator ("spectrum_sensing_cf",
 	   gr_make_io_signature (MIN_IN, MAX_IN, ninput_samples*sizeof (gr_complex)),
 	   gr_make_io_signature (MIN_OUT, MAX_OUT, sizeof (float)),
@@ -78,7 +78,8 @@ howto_spectrum_sensing_cf::howto_spectrum_sensing_cf (float sample_rate, int nin
       d_debug_histogram(debug_histogram),
       d_nconsecutive_frames_to_check(nframes_to_check), // Number of consecutive frames to be checked in order to make a assumption that the channel is occupied.
       d_nframes_to_average(nframes_to_average), // Number of frames used for averaging.
-      d_downconverter(downconverter)
+      d_downconverter(downconverter),
+      d_nSegsToCheck(nsegs_to_check) 
 {	
    float delta_f = d_sample_rate/d_ninput_samples;
 	d_useless_segment = (int)ceil(d_useless_band/delta_f);
@@ -320,17 +321,16 @@ float howto_spectrum_sensing_cf::calculate_false_alarm_rate(float alpha, float z
 float howto_spectrum_sensing_cf::calculate_primary_user_detection_rate(float alpha, float zref, int I) {
 
 	float ratio = 0.0, numberOfCorrectDetections = 0.0;
-   int nSegsToCheck = 6;
 
-   for(int i=0;i<=nSegsToCheck;i++) {
-      ratio = segment[d_band_location-(nSegsToCheck/2)+i]/zref;
+   for(int i=0;i<=d_nSegsToCheck;i++) {
+      ratio = segment[d_band_location-(d_nSegsToCheck/2)+i]/zref;
       if(ratio > alpha) {
          numberOfCorrectDetections++;
       }
       if(d_debug_stats) printf("ratio: %f - alpha: %f - segment[%d]: %f - zref: %f - I: %d\n",ratio,alpha,i,segment[i],zref,I);
    }
 
-   return numberOfCorrectDetections/(nSegsToCheck+1);
+   return numberOfCorrectDetections/(d_nSegsToCheck+1);
 }
 
 /* REFERENCES
