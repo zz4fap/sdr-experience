@@ -24,6 +24,25 @@ import howto
 import wx
 import matplotlib.pyplot as plt
 
+class SpectrumSensingBlockParameters():
+
+   def __init__(self):
+      self.pfa = 0.0001
+      self.pfd = 0.001
+      self.useless_bw = 400000.0
+      self.nframes_to_check = 2
+      self.nframes_to_average = 6 
+      self.samp_rate = 2.4e6
+      self.fft_size = 4096
+      self.samples_per_band = 16
+      self.tcme = 1.9528
+      self.output_pfa = False
+      self.debug_stats = False
+      self.histogram = False
+      self.primary_user_location = 20
+      self.nsegs_to_check = 6
+      self.downconverter = 1
+
 class PfaVsNoisePowerSimu(gr.top_block):
    " This contains the simulation flow graph "
    def __init__(self, pfa, pfd, freq, useless_bw, nframes_to_check, nframes_to_average):
@@ -34,10 +53,10 @@ class PfaVsNoisePowerSimu(gr.top_block):
       fft_size = 4096
       samples_per_band = 16
       tcme = 1.9528
-      output_pfa = True
+      output_pfa = False
       debug_stats = False
-      histogram = True
-      primary_user_location = 42
+      histogram = False
+      primary_user_location = 20
       nsegs_to_check = 6
       downconverter = 1
 
@@ -82,10 +101,9 @@ def simulate_pfa(pfa, pfd, freq, useless_bw, simu_time, nframes_to_check, nframe
 
 def plotHistogram(fg):
    nSubBands = fg.getNumberOfSubBands()
-   print nSubBands
+   #print nSubBands
    histogram = []
    for i in range(0,nSubBands):
-      #print i,' ',fg.getHistogram(i)
       histogram.append(fg.getHistogram(i))
    plt.stem(range(0,nSubBands), histogram)
    plt.ylabel('Number of FA in a given sub-band')
@@ -95,13 +113,18 @@ def plotHistogram(fg):
 if __name__ == "__main__":
    pfa = 0.0001
    pfd = 0.001
-   freq = 95.1e6
    useless_bw = 400000.0
    nframes_to_check = 2
    nframes_to_average = 6
-   nTrials = 6
+
+   ssblock = SpectrumSensingBlockParameters()
+   nTrials = 1
    simu_time = nTrials*1.74 # approximately nTrials*1000 samples
-   fa_rate = simulate_pfa(pfa, pfd, freq, useless_bw, simu_time, nframes_to_check, nframes_to_average)
-   print fa_rate
-   plt.show()
+   for i in range(87, 108):
+      for j in range(0,5):
+         step = float((2*j+1)*0.1) - 0.2
+         freq = float(i + step)*1e6
+         print freq
+         fa_rate = simulate_pfa(pfa, pfd, freq, useless_bw, simu_time, nframes_to_check, nframes_to_average)
+         print fa_rate
 

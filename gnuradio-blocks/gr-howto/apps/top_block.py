@@ -2,7 +2,7 @@
 ##################################################
 # Gnuradio Python Flow Graph
 # Title: Top Block
-# Generated: Sat Feb 23 13:09:15 2013
+# Generated: Sun Feb 24 11:35:38 2013
 ##################################################
 
 from gnuradio import eng_notation
@@ -49,7 +49,7 @@ class top_block(grc_wxgui.top_block_gui):
 		self.Add(self.wxgui_fftsink2_0.win)
 		self.rtlsdr_source_c_0 = osmosdr.source_c( args="nchan=" + str(1) + " " + "" )
 		self.rtlsdr_source_c_0.set_sample_rate(samp_rate)
-		self.rtlsdr_source_c_0.set_center_freq(95.3e6, 0)
+		self.rtlsdr_source_c_0.set_center_freq(95.1e6, 0)
 		self.rtlsdr_source_c_0.set_freq_corr(0, 0)
 		self.rtlsdr_source_c_0.set_gain_mode(0, 0)
 		self.rtlsdr_source_c_0.set_gain(10, 0)
