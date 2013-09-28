@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='ASCII'?>
 <flow_graph>
-  <timestamp>Thu Sep 27 19:49:55 2012</timestamp>
+  <timestamp>Sat Sep 28 11:59:18 2013</timestamp>
   <block>
     <key>options</key>
     <param>
@@ -84,10 +84,10 @@
     </param>
   </block>
   <block>
-    <key>howto_stream_to_vector</key>
+    <key>gr_throttle</key>
     <param>
       <key>id</key>
-      <value>howto_stream_to_vector_0</value>
+      <value>gr_throttle_0</value>
     </param>
     <param>
       <key>_enabled</key>
@@ -98,8 +98,8 @@
       <value>complex</value>
     </param>
     <param>
-      <key>num_items</key>
-      <value>2048</value>
+      <key>samples_per_second</key>
+      <value>samp_rate</value>
     </param>
     <param>
       <key>vlen</key>
@@ -107,7 +107,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(332, 330)</value>
+      <value>(260, 279)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -142,7 +142,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(27, 265)</value>
+      <value>(35, 266)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -150,10 +150,10 @@
     </param>
   </block>
   <block>
-    <key>gr_throttle</key>
+    <key>blocks_stream_to_vector</key>
     <param>
       <key>id</key>
-      <value>gr_throttle_0</value>
+      <value>blocks_stream_to_vector_0</value>
     </param>
     <param>
       <key>_enabled</key>
@@ -164,8 +164,8 @@
       <value>complex</value>
     </param>
     <param>
-      <key>samples_per_second</key>
-      <value>samp_rate</value>
+      <key>num_items</key>
+      <value>2048</value>
     </param>
     <param>
       <key>vlen</key>
@@ -173,7 +173,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(260, 279)</value>
+      <value>(283, 374)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -264,7 +264,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(616, 36)</value>
+      <value>(238, 49)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -307,7 +307,86 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(524, 298)</value>
+      <value>(256, 451)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+  </block>
+  <block>
+    <key>howto_spectrum_sensing_cf</key>
+    <param>
+      <key>id</key>
+      <value>howto_spectrum_sensing_cf_0</value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>sample_rate</key>
+      <value>samp_rate</value>
+    </param>
+    <param>
+      <key>ninput_samples</key>
+      <value>2048</value>
+    </param>
+    <param>
+      <key>samples_per_band</key>
+      <value>16</value>
+    </param>
+    <param>
+      <key>pfd</key>
+      <value>0.001</value>
+    </param>
+    <param>
+      <key>pfa</key>
+      <value>0.0001</value>
+    </param>
+    <param>
+      <key>tcme</key>
+      <value>1.9528</value>
+    </param>
+    <param>
+      <key>output_far</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>band_location</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>nsegs_to_check</key>
+      <value>6</value>
+    </param>
+    <param>
+      <key>debug_stats</key>
+      <value>False</value>
+    </param>
+    <param>
+      <key>debug_histogram</key>
+      <value>False</value>
+    </param>
+    <param>
+      <key>useless_band</key>
+      <value>200000.0</value>
+    </param>
+    <param>
+      <key>nframes_to_check</key>
+      <value>3</value>
+    </param>
+    <param>
+      <key>nframes_to_average</key>
+      <value>4</value>
+    </param>
+    <param>
+      <key>downconverter</key>
+      <value>1</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(543, 297)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -334,66 +413,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(1089, 301)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-  </block>
-  <block>
-    <key>howto_spectrum_sensing_cf</key>
-    <param>
-      <key>id</key>
-      <value>howto_spectrum_sensing_cf_0</value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>sample_rate</key>
-      <value>samp_rate</value>
-    </param>
-    <param>
-      <key>ninput_samples</key>
-      <value>2048</value>
-    </param>
-    <param>
-      <key>nsub_bands</key>
-      <value>128</value>
-    </param>
-    <param>
-      <key>pfd</key>
-      <value>0.001</value>
-    </param>
-    <param>
-      <key>pfa</key>
-      <value>0.0001</value>
-    </param>
-    <param>
-      <key>tcme</key>
-      <value>1.9528</value>
-    </param>
-    <param>
-      <key>debug_far</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>debug_cdr</key>
-      <value>False</value>
-    </param>
-    <param>
-      <key>band_location</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>debug_stats</key>
-      <value>False</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(777, 290)</value>
+      <value>(944, 390)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -403,18 +423,6 @@
   <connection>
     <source_block_id>fft_vxx_0</source_block_id>
     <sink_block_id>howto_spectrum_sensing_cf_0</sink_block_id>
-    <source_key>0</source_key>
-    <sink_key>0</sink_key>
-  </connection>
-  <connection>
-    <source_block_id>howto_stream_to_vector_0</source_block_id>
-    <sink_block_id>fft_vxx_0</sink_block_id>
-    <source_key>0</source_key>
-    <sink_key>0</sink_key>
-  </connection>
-  <connection>
-    <source_block_id>gr_throttle_0</source_block_id>
-    <sink_block_id>howto_stream_to_vector_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>
@@ -433,6 +441,18 @@
   <connection>
     <source_block_id>howto_spectrum_sensing_cf_0</source_block_id>
     <sink_block_id>gr_null_sink_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>blocks_stream_to_vector_0</source_block_id>
+    <sink_block_id>fft_vxx_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>gr_noise_source_x_0</source_block_id>
+    <sink_block_id>blocks_stream_to_vector_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>
