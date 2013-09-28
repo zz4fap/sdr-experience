@@ -18,10 +18,7 @@
 # Boston, MA 02110-1301, USA.
 
 install(FILES
-    howto_square_ff.xml
-    howto_square2_ff.xml
     howto_peak_location_cf.xml
     howto_spectrum_sensing_cf.xml
-    howto_stream_to_vector.xml
     DESTINATION share/gnuradio/grc/blocks
 )

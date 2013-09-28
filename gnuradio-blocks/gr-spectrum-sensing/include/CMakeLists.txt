@@ -22,10 +22,7 @@
 ########################################################################
 install(FILES
     howto_api.h
-    howto_square_ff.h
-    howto_square2_ff.h
     howto_peak_location_cf.h
     howto_spectrum_sensing_cf.h
-    howto_stream_to_vector.h
     DESTINATION include/howto
 )

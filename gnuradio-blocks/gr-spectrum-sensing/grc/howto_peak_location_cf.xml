@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <block>
-  <name>PEAK LOCATION</name>
+  <name>Peak Location</name>
   <key>howto_peak_location_cf</key>
-  <category>HOWTO</category>
+  <category>Spectrum Sensing</category>
   <import>import howto</import>
   <make>howto.peak_location_cf($sample_rate,$ninput_samples)</make>
   <callback>set_sample_rate($sample_rate)</callback>
