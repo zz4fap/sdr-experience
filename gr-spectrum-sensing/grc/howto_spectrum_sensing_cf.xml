@@ -138,7 +138,11 @@
     <vlen>$ninput_samples</vlen>
   </sink>
   <source>
-    <name>out</name>
+    <name>pd</name>
+    <type>float</type>
+  </source>
+  <source>
+    <name>snr</name>
     <type>float</type>
   </source>
 </block>

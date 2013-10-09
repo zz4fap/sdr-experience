@@ -50,12 +50,12 @@ howto_spectrum_sensing_cf_sptr howto_make_spectrum_sensing_cf(float sample_rate,
  * output signatures are used by the runtime system to
  * check that a valid number and type of inputs and outputs
  * are connected to this block.  In this case, we accept
- * only 1 input and 1 output.
+ * only 1 input and 2 output.
  */
 static const int MIN_IN = 1;	// mininum number of input streams
 static const int MAX_IN = 1;	// maximum number of input streams
-static const int MIN_OUT = 1;	// minimum number of output streams
-static const int MAX_OUT = 1;	// maximum number of output streams
+static const int MIN_OUT = 2;	// minimum number of output streams
+static const int MAX_OUT = 2;	// maximum number of output streams
 
 /*
  * The private constructor
@@ -143,7 +143,8 @@ howto_spectrum_sensing_cf::work (int noutput_items,
 			       gr_vector_void_star &output_items)
 {
    const gr_complex *in = (const gr_complex *) input_items[0];
-   float *out = (float *) output_items[0];
+   float *out0 = (float *) output_items[0];
+   float *out1 = (float *) output_items[1];
 	
    float zref, alpha, false_alarm_rate, correct_detection_rate;
    int n_zref_segs = 0;
@@ -163,9 +164,11 @@ howto_spectrum_sensing_cf::work (int noutput_items,
 	      }
       }
       if(d_output_far) {
-         out[k] = false_alarm_rate/d_nconsecutive_frames_to_check;
+         out0[k] = false_alarm_rate/d_nconsecutive_frames_to_check;
+	 out1[k] = zref;
       } else {
-         out[k] = correct_detection_rate/d_nconsecutive_frames_to_check;
+         out0[k] = correct_detection_rate/d_nconsecutive_frames_to_check;
+	 out1[k] = zref;
       }
    }
 
