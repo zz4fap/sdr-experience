@@ -1,6 +1,6 @@
 clear all;clc
 
-plot_figures = false;
+plot_figures = true;
 
 %% ----------------------------- FM Signal Generation ---------------------
 L = 80000;
@@ -56,15 +56,16 @@ band_location = floor(fc/(numSamplesSegment*(fs/NFFT))); % Location of center fr
 
 segments_to_check = [28 29 30 32 33 34 35 36 37];
 
-trials_counter = 0;
-false_alarm_counter = 0;
-correct_rejection_counter = 0;
-correct_detection_counter = 0;
-false_rejection_counter = 0;
 counter = 0;
 pd_vs_snr = zeros(2,length(-30:1:30));
 
 for snr=-30:1:30
+    
+    trials_counter = 0;
+    false_alarm_counter = 0;
+    correct_rejection_counter = 0;
+    correct_detection_counter = 0;
+    false_rejection_counter = 0;
     
     for trial = 1:1:numTrials
         

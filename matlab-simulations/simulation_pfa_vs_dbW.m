@@ -56,15 +56,16 @@ band_location = floor(fc/(numSamplesSegment*(fs/NFFT))); % Location of center fr
 
 segments_to_check = [28 29 30 32 33 34 35 36 37];
 
-trials_counter = 0;
-false_alarm_counter = 0;
-correct_rejection_counter = 0;
-correct_detection_counter = 0;
-false_rejection_counter = 0;
 counter = 0;
 pfa_vs_dbW = zeros(2,length(-30:1:30));
 
 for dbW=-30:1:30
+    
+    trials_counter = 0;
+    false_alarm_counter = 0;
+    correct_rejection_counter = 0;
+    correct_detection_counter = 0;
+    false_rejection_counter = 0;
     
     for trial = 1:1:numTrials
         
