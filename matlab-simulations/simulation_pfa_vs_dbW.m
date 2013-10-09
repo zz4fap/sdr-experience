@@ -3,15 +3,15 @@ clear all;clc
 plot_figures = false;
 
 %% ----------------------------- FM Signal Generation ---------------------
-L = 8000;
+L = 80000;
 fs = 2e6; % Sampling frequency.
 BWfm = 200e3; % in Hz
 
-fc = 2000*(fs/L); % Carrier Frequency
-fm = 60*(fs/L); % Maximum allowed frequency for commercial FM.
+fc = 20000*(fs/L); % Carrier Frequency
+fm = 600*(fs/L); % Maximum allowed frequency for commercial FM.
 delta_f = 75e3; % Maximum allowed frequency deviation for commercial FM.
 
-Ac = 1; % Amplitude of the modulated signal.
+Ac = 10; % Amplitude of the modulated signal.
 
 n = 0:1/fs:(L-1)*(1/fs);
 
@@ -47,12 +47,14 @@ numSamplesSegment = 16;
 Tcme = 6.9078; % for 16 samples
 Pfa = 0.01/100; % 0.01%
 NFFT = 2048;
-BWfm_useful = 180e3;
+BWfm_useful = 150e3;
 
 numOfSegments = NFFT/numSamplesSegment; % Number of energy segments.
 Z = zeros(1,numOfSegments);
 numOfSegsToCheck = floor(BWfm_useful/(numSamplesSegment*(fs/NFFT))); % Number of segments to check around the given primary user position.
 band_location = floor(fc/(numSamplesSegment*(fs/NFFT))); % Location of center frequency of the primary user.
+
+segments_to_check = [28 29 30 32 33 34 35 36 37];
 
 trials_counter = 0;
 false_alarm_counter = 0;
@@ -134,11 +136,9 @@ for dbW=-30:1:30
             false_alarm_rate = false_alarm_counter/trials_counter;
             correct_rejection_rate = correct_rejection_counter/trials_counter;
         else
-            start_seg = band_location-floor(numOfSegsToCheck/2);
-            end_seg = band_location+floor(numOfSegsToCheck/2);
-            for j=start_seg:1:end_seg
+            for j=1:1:length(segments_to_check)
                 trials_counter = trials_counter + 1;
-                ratio = Z_orig(j)/Zref;
+                ratio = Z_orig(segments_to_check(j))/Zref;
                 if(ratio > alpha)
                     correct_detection_counter = correct_detection_counter + 1;
                 else
@@ -165,6 +165,8 @@ end
 
 %% -------------------------------- Figures -------------------------------
 if(plot_figures)
+    L = L/10;
+    
     f = fs/2*linspace(0,1,L/2+1);
     
     % Plot single-sided amplitude spectrum.
