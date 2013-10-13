@@ -75,6 +75,7 @@ private:
   float calculate_scale_factor(int x);
   float calculate_false_alarm_rate(float alpha, float zref, int I);
   float calculate_primary_user_detection_rate(float alpha, float zref, int I);
+  float calculate_primary_user_detection_ratev2(float alpha, float zref, int I);
 
   void (howto_spectrum_sensing_cf::*avg_and_seg_spectrum)(const gr_complex *in, int output_item, int segment_group);
   int select_avg_and_seg_method(int downconverter, int useless_segment);

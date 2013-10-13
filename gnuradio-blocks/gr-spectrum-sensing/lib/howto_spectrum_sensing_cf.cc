@@ -159,7 +159,7 @@ howto_spectrum_sensing_cf::work (int noutput_items,
 	      if(d_output_far) {
 		      false_alarm_rate += calculate_false_alarm_rate(alpha, zref, n_zref_segs);
 	      } else {
-            correct_detection_rate += calculate_primary_user_detection_rate(alpha, zref, n_zref_segs);
+            correct_detection_rate += calculate_primary_user_detection_ratev2(alpha, zref, n_zref_segs);
 	      }
       }
       if(d_output_far) {
@@ -327,10 +327,27 @@ float howto_spectrum_sensing_cf::calculate_primary_user_detection_rate(float alp
       if(ratio > alpha) {
          numberOfCorrectDetections++;
       }
-      if(d_debug_stats) printf("ratio: %f - alpha: %f - segment[%d]: %f - zref: %f - I: %d\n",ratio,alpha,i,segment[i],zref,I);
+      if(d_debug_stats) printf("ratio: %f - alpha: %f - segment[%d]: %f - zref: %f - I: %d\n",ratio,alpha,i,segment[d_band_location-(d_nSegsToCheck/2)+i],zref,I);
    }
 
    return numberOfCorrectDetections/(d_nSegsToCheck+1);
+}
+
+float howto_spectrum_sensing_cf::calculate_primary_user_detection_ratev2(float alpha, float zref, int I) {
+
+	float ratio = 0.0, numberOfCorrectDetections = 0.0;
+   int segments_to_check[] = {54, 56, 58, 62, 65, 69, 71, 73}; // For FFT size of 4096.
+   int numSegsToCheck = 8;
+
+   for(int i=0;i<8;i++) {
+      ratio = segment[segments_to_check[i]]/zref;
+      if(ratio > alpha) {
+         numberOfCorrectDetections++;
+      }
+      if(d_debug_stats) printf("ratio: %f - alpha: %f - segment[%d]: %f - zref: %f - I: %d\n",ratio,alpha,i,segment[segments_to_check[i]],zref,I);
+   }
+
+   return numberOfCorrectDetections/(numSegsToCheck);
 }
 
 /* REFERENCES
