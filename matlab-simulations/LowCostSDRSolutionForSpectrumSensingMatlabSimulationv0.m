@@ -46,7 +46,7 @@ Pfd = 0.001;
 numSamplesSegment = 16;
 Tcme = 1.9528; % for 16 samples
 Pfa = 0.3/100; % 0.01%
-NFFT = 2048;
+NFFT = 4096;
 BWfm_useful = 180e3;
 
 numOfSegments = NFFT/numSamplesSegment; % Number of energy segments.
