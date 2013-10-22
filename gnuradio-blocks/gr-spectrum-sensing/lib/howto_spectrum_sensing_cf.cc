@@ -336,18 +336,41 @@ float howto_spectrum_sensing_cf::calculate_primary_user_detection_rate(float alp
 float howto_spectrum_sensing_cf::calculate_primary_user_detection_ratev2(float alpha, float zref, int I) {
 
 	float ratio = 0.0, numberOfCorrectDetections = 0.0;
-   int segments_to_check[] = {54, 56, 58, 62, 65, 69, 71, 73}; // For FFT size of 4096.
-   int numSegsToCheck = 8;
+   int segments_to_check[4][9] = {{6, 7, 8, 9, 0, 0, 0, 0, 0},          // For FFT size: 512.
+                                  {13, 14, 15, 16, 17, 18, 0, 0, 0},    // For FFT size: 1024.
+                                  {28, 29, 30, 32, 33, 34, 35, 36, 37}, // For FFT size: 2048.
+                                  {54, 56, 58, 62, 65, 69, 71, 73, 0}}; // For FFT size: 4096.
+   int num_of_segs[] = {4, 6, 9, 8};
+   int idx;
 
-   for(int i=0;i<8;i++) {
-      ratio = segment[segments_to_check[i]]/zref;
+   switch(d_ninput_samples) {
+      case 512:
+         idx = 0;
+         break;
+      case 1024:
+         idx = 1;
+         break;
+      case 2048:
+         idx = 2;
+         break;
+      case 4096:
+         idx = 3;
+         break;
+      default:
+         idx = 0;
+         printf("ERROR: FFT Size Not Defined!!!!");
+         break;
+   }
+
+   for(int i=0;i<num_of_segs[idx];i++) {
+      ratio = segment[segments_to_check[idx][i]]/zref;
       if(ratio > alpha) {
          numberOfCorrectDetections++;
       }
-      if(d_debug_stats) printf("ratio: %f - alpha: %f - segment[%d]: %f - zref: %f - I: %d\n",ratio,alpha,i,segment[segments_to_check[i]],zref,I);
+      if(d_debug_stats) printf("ratio: %f - alpha: %f - segment[%d]: %f - zref: %f - I: %d\n",ratio,alpha,i,segment[segments_to_check[idx][i]],zref,I);
    }
 
-   return numberOfCorrectDetections/(numSegsToCheck);
+   return numberOfCorrectDetections/num_of_segs[idx];
 }
 
 /* REFERENCES
