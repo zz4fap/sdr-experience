@@ -23,9 +23,9 @@ import howto
 import wx
 import matplotlib.pyplot as plt
 
-class PdVsSnrSimu(gr.top_block):
+class PfaVsNoisePowerSimu(gr.top_block):
    " This contains the simulation flow graph "
-   def __init__(self, signal, signal_power, snr, pd, pfd, fft_size):
+   def __init__(self, signal, signal_power, snr, pfa, pfd, fft_size):
       gr.top_block.__init__(self)
 
       # Parameters
@@ -47,11 +47,11 @@ class PdVsSnrSimu(gr.top_block):
 
       # Create AWGN noise
       noise = awgn(fft_size, noise_power)
-      
+
       effective_noise_power = calculateSignalPower(noise);
       effective_snr = signal_power - effective_noise_power;
-      #print "effective_noise_power: %f\n" % effective_noise_power
-      #print "effective_snr: %f\n" % effective_snr
+      print "effective_noise_power: %f\n" % effective_noise_power
+      print "effective_snr: %f\n" % effective_snr
 
       # Create corrupted signal
       rx_signal = signal[0:fft_size] + noise
@@ -78,7 +78,7 @@ class PdVsSnrSimu(gr.top_block):
 def convertFromPowerToStdDev(dbW):
    """ Convert noise power from dbW to standard deviation in voltage """ 
    variance = 10**(dbW/10)
-   return math.sqrt(variance/2)
+   return math.sqrt(variance/2.0)
 
 def awgn(size, dbW):
    """ Creates an AWGN channel """ 
@@ -109,21 +109,22 @@ def calculateSignalPower(signal):
    return power
 
 def simulate_pd(signal, snr, pfa, pfd, nTrials, fft_size):
-   """ All the work's done here: create flow graph, run and read out Pd """
+   """ All the work's done here: create flow graph, run and read out Pfa """
    signal_power = calculateSignalPower(signal)
-   correct_detection_rate = 0.0
+   detection_rate = 0.0
    if ((fft_size % 8) == 0):
-	   print "SNR = %f [dB]" % snr
+	   print "Pfa = %f" % pfa
 	   for j in range(1,nTrials+1):
-	      fg = PdVsSnrSimu(signal, signal_power, snr, pfa, pfd, fft_size)
+	      fg = PfaVsNoisePowerSimu(signal, signal_power, snr, pfa, pfd, fft_size)
 	      fg.run()
-	      correct_detection_rate = correct_detection_rate + fg.sink.data()[0]
-	   return correct_detection_rate/nTrials
+	      detection_rate = detection_rate + fg.sink.data()[0]
+	   return detection_rate/nTrials
    else:
 	   print "Wrong FFT Size!"
 	   return 0
 
 def plotHistogram(fg):
+   """ Plots the number of false alarms per sub-band """
    nSubBands = fg.getNumberOfSubBands()
    histogram = []
    for i in range(0,nSubBands):
@@ -133,25 +134,25 @@ def plotHistogram(fg):
    plt.xlabel('sub-band')
    plt.draw()
 
-def writeResultToFile(pd_simu, snr_range, fft_size):
+def writeResultToFile(pd_simu, pfa_range, fft_size):
    """ Creates a comma separated file for Matlab importing and reading """
-   filename = "pd_vs_snr_gnurad_simu_" + str(fft_size) + ".dat"
+   filename = "pfa_vs_achieved_pd_gnurad_simu_" + str(fft_size) + ".dat"
    f = open(filename, 'w')
-   f.write('snr,\tPd\n')
-   for i in range(0,len(snr_range)):
-      result = '{:f},\t{:f}\n'.format(snr_range[i],pd_simu[i])
+   f.write('DesiredPfa,\tAchievedPd\n')
+   for i in range(0,len(pfa_range)):
+      result = '{:f},\t{:f}\n'.format(pfa_range[i],pd_simu[i])
       f.write(str(result))
    f.close()
 
 if __name__ == "__main__":
-   pfa = 0.0001
+   pfa_min = 0.00001
+   pfa_max = 0.1
+   pfa_step = 0.000001
    pfd = 0.001
-   snr_min = -30
-   snr_max = 30
-   snr_step = 0.1
+   snr = 0 # in dB
    nTrials = 1000
    fft_size_vector = [512, 1024, 2048, 4096]
-   snr_range = numpy.arange(snr_min, snr_max+1, snr_step)
+   pfa_range = numpy.arange(pfa_min, pfa_max+pfa_step, pfa_step)
 
    # Generate FM Signal
    L = 80000      # Number of samples to be generated.
@@ -167,41 +168,16 @@ if __name__ == "__main__":
 
    for fft_size in fft_size_vector:
 	   print "\nSimulating for fft size: %d" %fft_size 
-	   pd_simu = [simulate_pd(hil_fm, snr, pfa, pfd, nTrials, fft_size) for snr in snr_range]
-	   writeResultToFile(pd_simu, snr_range, fft_size)
+	   pd_simu = [simulate_pd(hil_fm, snr, pfa, pfd, nTrials, fft_size) for pfa in pfa_range]
+	   writeResultToFile(pd_simu, pfa_range, fft_size)
 
-	   # -------- FIGURES --------
-	   # Pd vs SNR for the last fft size
-	   pylab.plot(snr_range,pd_simu)
-	   pylab.title('Pd vs SNR')
-	   pylab.xlabel('SNR [dB]')
-	   pylab.ylabel('Achieved Pd')
-	   pylab.grid()
+	   f = pylab.figure()
+	   s = f.add_subplot(1,1,1)
+	   s.plot(pfa_range, pd_simu)
+	   s.set_title('Pfa Simulation ' + str(fft_size))
+	   s.set_xlabel('Desired Pfa')
+	   s.set_ylabel('Achieved Pd')
+	   s.legend()
+	   s.grid()
 	   pylab.show()
-
-   # FFT's frequency bins.
-   freq = numpy.fft.fftfreq(NFFT,1/fs)
-
-   # Plot FFT spectrum of the generated FM signal.
-   Y_FM = numpy.fft.fft(e_fm,NFFT)/NFFT
-   #Y_FM_shifted = numpy.fft.fftshift(Y_FM)
-   pylab.plot(freq,2*abs(Y_FM))
-   pylab.title('FM Spectrum')
-   pylab.xlabel('Frequency [Hz]')
-   pylab.ylabel('|Y|')
-   pylab.grid()
-   #pylab.plot(freq[0:NFFT/2],2*abs(FFT[0:NFFT/2]))
-   pylab.show()
-
-   # Plot of the Hilbert's transform of the FM signal.
-   Y_HIL_FM = numpy.fft.fft(hil_fm,NFFT)/NFFT
-   #Y_HIL_FM_shifted = numpy.fft.fftshift(Y_HIL_FM)
-   pylab.plot(freq,2*abs(Y_HIL_FM))
-   #pylab.plot(2*abs(Y_HIL_FM))
-   pylab.title('Hilbert\'s Transform of the FM signal')
-   pylab.xlabel('Frequency [Hz]')
-   pylab.ylabel('|Y|')
-   pylab.grid()
-   #pylab.plot(freq[0:NFFT/2],2*abs(FFT[0:NFFT/2]))
-   pylab.show()
 
